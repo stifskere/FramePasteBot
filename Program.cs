@@ -29,7 +29,7 @@ public static class Bot
 
 public static class CustomMethods
 {
-    public static async Task<dynamic> HttpRequest(string url, Dictionary<string, string> headers = null)
+    public static async Task<dynamic> HttpRequest(string url, Dictionary<string, string>? headers = null)
     {
         using HttpClient client = new HttpClient();
         if(headers != null) foreach (KeyValuePair<string, string> header in headers) client.DefaultRequestHeaders.Add(header.Key, header.Value);

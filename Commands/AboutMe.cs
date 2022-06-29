@@ -30,6 +30,7 @@ public class AboutMe : InteractionModuleBase<SocketInteractionContext>
             .AddField("🔹 Joined FramePaste", $"<t:{user.JoinedAt.Value.ToUnixTimeMilliseconds() / 1000}:f>\n<t:{user.JoinedAt.Value.ToUnixTimeMilliseconds() / 1000}:R>")
             .AddField("🔹 Roles", roles)
             .WithImageUrl($"https://cdn.discordapp.com/banners/{user.Id}/{((dynamic)await HttpRequest(url: $"https://discord.com/api/v8/users/{user.Id}", new Dictionary<string, string> {{"Authorization", $"Bot {LoadConfig().Token.ToString()}"}})).banner}.gif");
+
         await RespondAsync(embed: infoEmbed.Build());
     }
 }
