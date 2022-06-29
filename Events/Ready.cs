@@ -17,7 +17,7 @@ public static class Ready
         _commands.SlashCommandExecuted += SlashCommandExecuted;
         await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
         await _commands.RegisterCommandsToGuildAsync(ulong.Parse(LoadConfig().GuildId.ToString()), true);
-
+        
     }
     
     private static async Task InteractionCreated(SocketInteraction interaction)
