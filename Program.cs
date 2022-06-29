@@ -20,7 +20,7 @@ public static class Bot
     {
         Client.Ready += Events.Ready.Event;
         Client.Log += Events.Log.Event;
-        
+
         await Client.LoginAsync(TokenType.Bot, token);
         await Client.StartAsync();
         await Task.Delay(-1);
@@ -29,10 +29,10 @@ public static class Bot
 
 public static class CustomMethods
 {
-    public static async Task<dynamic> HttpRequest(string url, Dictionary<string, string>? headers = null)
+    public static async Task<dynamic> HttpRequest(string url, Dictionary<string, string> headers = null)
     {
         using HttpClient client = new HttpClient();
-        foreach (KeyValuePair<string, string> header in headers) client.DefaultRequestHeaders.Add(header.Key, header.Value);
+        if(headers != null) foreach (KeyValuePair<string, string> header in headers) client.DefaultRequestHeaders.Add(header.Key, header.Value);
         return JsonConvert.DeserializeObject(await client.GetStringAsync(url))!;
 
     }
@@ -40,6 +40,8 @@ public static class CustomMethods
     public static IEnumerable<string> SplitChunks(string str, int maxChunkSize) {
         for (int i = 0; i < str.Length; i += maxChunkSize) yield return str.Substring(i, Math.Min(maxChunkSize, str.Length-i));
     }
+
+    public static Random Random = new Random();
 }
 
 public static class Config
@@ -50,4 +52,6 @@ public static class Config
         using StreamReader file = new StreamReader("Config.json");
         return JsonConvert.DeserializeObject(file.ReadToEnd())!;
     }
+
+    public static DataBaseHandler DataBase = new DataBaseHandler($"./Databases/{LoadConfig().GuildId.ToString()}.db");
 }

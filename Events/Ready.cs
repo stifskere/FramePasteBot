@@ -11,7 +11,7 @@ public static class Ready
     public static async Task Event()
     {
         Console.WriteLine($"Bot started as {Bot.Client.CurrentUser.Username}");
-        
+        CreateDataBaseTables(DataBase);
         Bot.Client.InteractionCreated += InteractionCreated;
         _commands = new InteractionService(Bot.Client);
         _commands.SlashCommandExecuted += SlashCommandExecuted;
@@ -29,5 +29,11 @@ public static class Ready
     {
         if(result.Error != null) Console.WriteLine(result.ErrorReason);
         return Task.CompletedTask;
+    }
+
+    private static void CreateDataBaseTables(DataBaseHandler db)
+    {
+        db.RunSqliteNonQueryCommand($"CREATE TABLE IF NOT EXISTS BannedWords(BannedWord STRING, UNIQUE(BannedWord))");
+        db.RunSqliteNonQueryCommand($"CREATE TABLE IF NOT EXISTS Cases(Id INTEGER PRIMARY KEY AUTOINCREMENT, UserId INTEGER, ModeratorId INTEGER, Reason STRING)");
     }
 }
