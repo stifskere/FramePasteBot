@@ -1,6 +1,6 @@
 ﻿global using static FPB.Config;
 global using static FPB.CustomMethods;
-
+using System.Data.SQLite;
 using Discord;
 using Discord.WebSocket;
 using Newtonsoft.Json;
@@ -20,6 +20,7 @@ public static class Bot
     {
         Client.Ready += Events.Ready.Event;
         Client.Log += Events.Log.Event;
+        Client.MessageReceived += Events.MessageReceived.Event;
 
         await Client.LoginAsync(TokenType.Bot, token);
         await Client.StartAsync();
@@ -42,6 +43,19 @@ public static class CustomMethods
     }
 
     public static Random Random = new Random();
+
+    public static uint GetEmbedColor()
+    {
+        uint color = 0;
+        SQLiteDataReader embedColorRead = DataBase.RunSqliteQueryCommand("SELECT * FROM Configuration WHERE key = 'EmbedColor'");
+        while (embedColorRead.Read())
+        {
+            color = uint.Parse(embedColorRead.GetString(1), System.Globalization.NumberStyles.HexNumber);
+            break;
+        }
+
+        return color;
+    }
 }
 
 public static class Config

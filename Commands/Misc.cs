@@ -3,9 +3,9 @@ using Discord.Interactions;
 
 namespace FPB.Commands;
 
-public class EightBall : InteractionModuleBase<SocketInteractionContext> 
+[Group("misc", "Misc commands")]
+public class Misc : InteractionModuleBase<SocketInteractionContext>
 {
-    
     [SlashCommand("8ball", "You ask a question and it will answer his thoughts")]
     public async Task EightBallAsync([Summary("question", "What do you want to ask this saviour?")]string question)
     {
@@ -13,8 +13,23 @@ public class EightBall : InteractionModuleBase<SocketInteractionContext>
 
         EmbedBuilder eightBallEmbed = new EmbedBuilder()
             .WithTitle("8ball")
-            .WithDescription($"> {question}\n\n**{(question.Length < 4 ? "Ask a real question you dumbass" : answers[CustomMethods.Random.Next(answers.Length)])}**");
+            .WithDescription($"> {question}\n\n**{(question.Length < 4 ? "Ask a real question you dumbass" : answers[CustomMethods.Random.Next(answers.Length)])}**")
+            .WithColor(GetEmbedColor());
 
         await RespondAsync(embed: eightBallEmbed.Build());
+    }
+
+    [SlashCommand("band", "Honorary ban")]
+    public async Task BandAsync([Summary("User", "Who will get honorary banned")]IUser user)
+    {
+        await RespondAsync("k", ephemeral: true);
+        await Context.Channel.SendMessageAsync($"<@{user.Id}> has received an honorary ban!");
+    }
+
+    [SlashCommand("unband", "Remove honorary ban")]
+    public async Task UnBandAsync([Summary("User", "The lucky person that's gonna get unbanned")]IUser user)
+    {
+        await RespondAsync("k", ephemeral: true);
+        await Context.Channel.SendMessageAsync($"<@{user.Id}> had their honorary ban revoked!");
     }
 }

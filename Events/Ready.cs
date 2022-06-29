@@ -34,6 +34,8 @@ public static class Ready
     private static void CreateDataBaseTables(DataBaseHandler db)
     {
         db.RunSqliteNonQueryCommand($"CREATE TABLE IF NOT EXISTS BannedWords(BannedWord STRING, UNIQUE(BannedWord))");
-        db.RunSqliteNonQueryCommand($"CREATE TABLE IF NOT EXISTS Cases(Id INTEGER PRIMARY KEY AUTOINCREMENT, UserId INTEGER, ModeratorId INTEGER, Reason STRING)");
+        db.RunSqliteNonQueryCommand($"CREATE TABLE IF NOT EXISTS Cases(Id INTEGER PRIMARY KEY AUTOINCREMENT, UserId INTEGER, ModeratorId INTEGER, Reason STRING, Time INT)");
+        db.RunSqliteNonQueryCommand($"CREATE TABLE IF NOT EXISTS Configuration(key STRING, value STRING, UNIQUE(key))");
+        try{db.RunSqliteNonQueryCommand($"INSERT INTO Configuration(key, value) VALUES('EmbedColor', 'ffff00')");}catch{/*exists*/}
     }
 }

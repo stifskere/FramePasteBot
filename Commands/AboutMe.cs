@@ -29,7 +29,8 @@ public class AboutMe : InteractionModuleBase<SocketInteractionContext>
             .AddField("🔹 Account creation date", $"<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:f>\n<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:R>")
             .AddField("🔹 Joined FramePaste", $"<t:{user.JoinedAt.Value.ToUnixTimeMilliseconds() / 1000}:f>\n<t:{user.JoinedAt.Value.ToUnixTimeMilliseconds() / 1000}:R>")
             .AddField("🔹 Roles", roles)
-            .WithImageUrl($"https://cdn.discordapp.com/banners/{user.Id}/{((dynamic)await HttpRequest(url: $"https://discord.com/api/v8/users/{user.Id}", new Dictionary<string, string> {{"Authorization", $"Bot {LoadConfig().Token.ToString()}"}})).banner}.gif");
+            .WithImageUrl($"https://cdn.discordapp.com/banners/{user.Id}/{((dynamic)await HttpRequest(url: $"https://discord.com/api/v8/users/{user.Id}", new Dictionary<string, string> {{"Authorization", $"Bot {LoadConfig().Token.ToString()}"}})).banner}.gif")
+            .WithColor(GetEmbedColor());
 
         await RespondAsync(embed: infoEmbed.Build());
     }

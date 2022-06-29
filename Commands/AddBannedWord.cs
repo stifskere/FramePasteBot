@@ -1,10 +1,11 @@
-﻿using Discord.Interactions;
+﻿using Discord;
+using Discord.Interactions;
 
 namespace FPB.Commands;
 
 public class AddBannedWord : InteractionModuleBase<SocketInteractionContext>
 {
-    [SlashCommand("addbannedword", "Add a banned word in the banned words database")]
+    [SlashCommand("addbannedword", "Add a banned word in the banned words database"), DefaultMemberPermissions(GuildPermission.Administrator)]
     public async Task AddBannedWordAsync()
     {
         await RespondWithModalAsync<BannedWordsModal>("bwmd");
@@ -13,7 +14,7 @@ public class AddBannedWord : InteractionModuleBase<SocketInteractionContext>
     [ModalInteraction("bwmd")]
     public async Task modalResponseAsync(BannedWordsModal modal)
     {
-        string[] words = modal.Words.Split(",");
+        string[] words = modal.words.Split(",");
         List<string> validWords = new();
         List<string> invalidWords = new();
 
@@ -30,6 +31,6 @@ public class AddBannedWord : InteractionModuleBase<SocketInteractionContext>
         public string Title { get; } = "Add banned words";
 
         [InputLabel("Banned words (separate by , no spaces)"), ModalTextInput("wordsInput", maxLength: 50)]
-        public string Words { get; set; }
+        public string words { get; set; }
     }
 }

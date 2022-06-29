@@ -12,4 +12,10 @@
       <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="ColorCat">
+        <HintPath>..\ColorCat.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
