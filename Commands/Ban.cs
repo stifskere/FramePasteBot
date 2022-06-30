@@ -7,12 +7,12 @@ namespace FPB.Commands;
 public class Ban : InteractionModuleBase<SocketInteractionContext>
 {
     [SlashCommand("ban", "Bans a user from the guild"), DefaultMemberPermissions(GuildPermission.BanMembers)]
-    public async Task BanAsync(IGuildUser user, string reason = "A reason was not defined", string? time = null)
+    public async Task BanAsync(IGuildUser user, string reason = "A reason was not defined", string time = "")
     {
         string bannedTime = "undefined time";
         int banTime = 0;
         
-        if (time != null)
+        if (time != "")
         {
             switch (time.ToLower().Last())
             {
