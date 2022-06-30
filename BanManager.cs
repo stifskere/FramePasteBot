@@ -36,6 +36,8 @@ public class BanManager
 
             foreach (KeyValuePair<long, long> entry in TimerDict)
             {
+                Console.WriteLine(entry.Value);
+                Console.WriteLine(actualTime);
                 if (entry.Value == actualTime)
                 {
                    IGuildUser user = Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId)).Users.First(u => u.Id == ulong.Parse(entry.Key.ToString()));
