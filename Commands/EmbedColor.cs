@@ -1,12 +1,11 @@
-﻿using System.Net;
-using Discord;
+﻿using Discord;
 using Discord.Interactions;
 
 namespace FPB.Commands;
 
 public class EmbedColor : InteractionModuleBase<SocketInteractionContext>
 {
-    [SlashCommand("embedcolor", "Change the embed color as an rgb value")]
+    [SlashCommand("embedcolor", "Change the embed color as an rgb value"), DefaultMemberPermissions(GuildPermission.ManageGuild)]
     public async Task EmbedColorAsync([Summary("Red", "Red value for the embed color"), MaxValue(255)]int R, [Summary("Green", "Green value for the embed color"), MaxValue(255)]int G, [Summary("Blue", "Blue value for the embed color"), MaxValue(255)]int B)
     {
         DataBase.RunSqliteNonQueryCommand($"UPDATE Configuration SET value = '{ColorCat.Colors.Hex.FromRGB(R, G, B)}' WHERE Key = 'EmbedColor'");

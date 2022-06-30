@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Data.SQLite;
+using Discord;
 using Discord.Interactions;
 
 namespace FPB.Commands;
@@ -41,12 +42,31 @@ public class Ban : InteractionModuleBase<SocketInteractionContext>
 
         EmbedBuilder banEmbed = new EmbedBuilder()
             .WithTitle($"{user.DisplayName}#{user.Discriminator} was banned")
-            .WithDescription($"**:The user was banned for:** {bannedTime}\n**with the reason:** {reason}")
+            .WithDescription($"**The user was banned for:** {bannedTime}\n**with the reason:** {reason}\n**Case Id:** {GetLastCaseId()}")
             .WithColor(GetEmbedColor());
+        
+        int banTimeStamp = new CustomMethods().NowTime + banTime;
+        
+        DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, Time, Type) VALUES({user.Id}, {Context.User.Id}, '{reason}', {(banTime == 0 ? null : banTimeStamp)}, 'Ban')");
+        
+        SendLog(embed: banEmbed.Build());
 
-        //gives 16, i'l change later.
-        DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, Time) VALUES({user.Id}, {Context.User.Id}, '{reason}', {(banTime == 0 ? null : TimeSpan.FromMilliseconds(DateTimeOffset.Now.ToUnixTimeMilliseconds() + banTime).Seconds)})");
+        banEmbed = banEmbed.WithThumbnailUrl("https://c.tenor.com/tkJk3Ui_OBIAAAAC/ban-hammer.gif");
         
         await RespondAsync(embed: banEmbed.Build());
+
+        banHandler.NewBanCounter(user, banTime);
+    }
+
+    private int GetLastCaseId()
+    {
+        int caseId = 0;
+        SQLiteDataReader caseRead = DataBase.RunSqliteQueryCommand("SELECT * FROM Cases ORDER BY Id DESC;");
+        while (caseRead.Read())
+        {
+            caseId = caseRead.GetInt32(0) + 1;
+            break;
+        }
+        return caseId;
     }
 }

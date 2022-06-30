@@ -1,6 +1,5 @@
 ﻿global using static FPB.Config;
 global using static FPB.CustomMethods;
-using System.Data.SQLite;
 using Discord;
 using Discord.WebSocket;
 using Newtonsoft.Json;
@@ -28,36 +27,6 @@ public static class Bot
     }
 }
 
-public static class CustomMethods
-{
-    public static async Task<dynamic> HttpRequest(string url, Dictionary<string, string>? headers = null)
-    {
-        using HttpClient client = new HttpClient();
-        if(headers != null) foreach (KeyValuePair<string, string> header in headers) client.DefaultRequestHeaders.Add(header.Key, header.Value);
-        return JsonConvert.DeserializeObject(await client.GetStringAsync(url))!;
-
-    }
-    
-    public static IEnumerable<string> SplitChunks(string str, int maxChunkSize) {
-        for (int i = 0; i < str.Length; i += maxChunkSize) yield return str.Substring(i, Math.Min(maxChunkSize, str.Length-i));
-    }
-
-    public static Random Random = new Random();
-
-    public static uint GetEmbedColor()
-    {
-        uint color = 0;
-        SQLiteDataReader embedColorRead = DataBase.RunSqliteQueryCommand("SELECT * FROM Configuration WHERE key = 'EmbedColor'");
-        while (embedColorRead.Read())
-        {
-            color = uint.Parse(embedColorRead.GetString(1), System.Globalization.NumberStyles.HexNumber);
-            break;
-        }
-
-        return color;
-    }
-}
-
 public static class Config
 {
     public static dynamic LoadConfig()
@@ -68,4 +37,5 @@ public static class Config
     }
 
     public static DataBaseHandler DataBase = new DataBaseHandler($"./Databases/{LoadConfig().GuildId.ToString()}.db");
+    public static BanManager banHandler = new BanManager();
 }
