@@ -36,7 +36,7 @@ public class BanManager
 
             foreach (KeyValuePair<long, long> entry in TimerDict)
             {
-                if (entry.Value == actualTime)
+                if (entry.Value <= actualTime)
                 {
                    IGuildUser user = Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId)).Users.First(u => u.Id == ulong.Parse(entry.Key.ToString()));
                    await user.Guild.RemoveBanAsync(user);
