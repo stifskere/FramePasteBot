@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 using Discord;
 using Discord.WebSocket;
 using static FPB.Bot;
@@ -59,7 +58,7 @@ public class BanManager
                        unBanEmbed = unBanEmbed
                            .WithTitle($"{userId} was unbanned")
                            .WithTitle($"**Reason:** Time expired\n**Ban reason:** {banData.GetString(3)}\n**Case ID:** {banData.GetInt32(0)}")
-                           .WithColor(GetEmbedColor());
+                           .WithColor(GetEmbedColor("EmbedGreenColor"));
                    }
                    
                    DataBase.RunSqliteNonQueryCommand($"DELETE FROM Cases WHERE UserId = {userId}");

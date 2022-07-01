@@ -44,7 +44,7 @@ public class Ban : InteractionModuleBase<SocketInteractionContext>
         EmbedBuilder banEmbed = new EmbedBuilder()
             .WithTitle($"{user.DisplayName}#{user.Discriminator} was banned")
             .WithDescription($"**The user was banned for:** {bannedTime}\n**with the reason:** {reason}\n**Case Id:** {GetLastCaseId()}")
-            .WithColor(GetEmbedColor());
+            .WithColor(GetEmbedColor("EmbedRedColor"));
         
         ulong banTimeStamp = NowTime + (ulong)banTime;
         
