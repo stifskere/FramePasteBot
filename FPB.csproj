@@ -13,8 +13,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="ClassLibs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Reference Include="ColorCat">
-        <HintPath>..\ColorCat.dll</HintPath>
+        <HintPath>ClassLibs\ColorCat.dll</HintPath>
       </Reference>
     </ItemGroup>
 
