@@ -1,7 +1,9 @@
-﻿using System.Data.SQLite;
+﻿using System.Data;
+using System.Data.SQLite;
 using Discord;
 using Discord.WebSocket;
 using static FPB.Bot;
+using ConnectionState = Discord.ConnectionState;
 
 namespace FPB;
 
@@ -56,7 +58,7 @@ public class BanManager
                    {
                        unBanEmbed = unBanEmbed
                            .WithTitle($"{userId} was unbanned")
-                           .WithTitle($"**Reason:** Time expired\n**Ban reason:**{banData.GetString(3)}")
+                           .WithTitle($"**Reason:** Time expired\n**Ban reason:** {banData.GetString(3)}\n**Case ID:** {banData.GetInt32(0)}")
                            .WithColor(GetEmbedColor());
                    }
                    
@@ -64,7 +66,6 @@ public class BanManager
                    TimerDict.Remove(userId);
                    
                    SendLog(embed: unBanEmbed.Build());
-                   Console.WriteLine("Ban removed");
                 }
             }
 

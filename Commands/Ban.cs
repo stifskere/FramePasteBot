@@ -62,10 +62,10 @@ public class Ban : InteractionModuleBase<SocketInteractionContext>
     private int GetLastCaseId()
     {
         int caseId = 0;
-        SQLiteDataReader caseRead = DataBase.RunSqliteQueryCommand("SELECT * FROM Cases ORDER BY Id DESC;");
+        SQLiteDataReader caseRead = DataBase.RunSqliteQueryCommand("SELECT * FROM sqlite_sequence WHERE name = 'Cases'");
         while (caseRead.Read())
         {
-            caseId = caseRead.GetInt32(0) + 1;
+            caseId = caseRead.GetInt32(0);
             break;
         }
         return caseId;
