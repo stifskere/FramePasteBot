@@ -38,9 +38,14 @@ public class BanManager
             {
                 if (entry.Value <= actualTime)
                 {
-                   IGuildUser user = Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId)).Users.First(u => u.Id == ulong.Parse(entry.Key.ToString()));
-                   await user.Guild.RemoveBanAsync(user);
-                   SQLiteDataReader banData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE Time = {actualTime}");
+                    IGuildUser user = Client.Guilds.First(g => g.Id == (ulong)LoadConfig().GuildId).Users.First(u => u.Id == ulong.Parse(entry.Key.ToString()));
+                    if (await user.Guild.GetBansAsync().AnyAsync(bans => bans.All(f => f.User.Id != user.Id)))
+                    {
+                        DataBase.RunSqliteNonQueryCommand($"DELETE FROM Cases WHERE UserId = {user.Id}");
+                        return;
+                    }
+                    await user.Guild.RemoveBanAsync(user);
+                   SQLiteDataReader banData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {user.Id}");
                    EmbedBuilder unBanEmbed = new EmbedBuilder();
 
                    while (banData.Read())
