@@ -33,7 +33,7 @@ public class CustomMethods
 
     public static Random Random = new Random();
 
-    public static int NowTime => (int) (DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
+    public static ulong NowTime => (ulong) (DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
 
     public static uint GetEmbedColor()
     {
