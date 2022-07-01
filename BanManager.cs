@@ -32,7 +32,7 @@ public class BanManager
     {
         while (Client.ConnectionState == ConnectionState.Connected)
         {
-            int actualTime = new CustomMethods().NowTime;
+            int actualTime = NowTime;
 
             foreach (KeyValuePair<long, long> entry in TimerDict)
             {

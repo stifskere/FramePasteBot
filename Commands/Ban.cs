@@ -1,4 +1,5 @@
 ﻿using System.Data.SQLite;
+using ColorCat;
 using Discord;
 using Discord.Interactions;
 
@@ -45,8 +46,8 @@ public class Ban : InteractionModuleBase<SocketInteractionContext>
             .WithDescription($"**The user was banned for:** {bannedTime}\n**with the reason:** {reason}\n**Case Id:** {GetLastCaseId()}")
             .WithColor(GetEmbedColor());
         
-        int banTimeStamp = new CustomMethods().NowTime + banTime;
-        
+        int banTimeStamp = NowTime + banTime;
+
         DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, Time, Type) VALUES({user.Id}, {Context.User.Id}, '{reason}', {(banTime == 0 ? null : banTimeStamp)}, 'Ban')");
         
         SendLog(embed: banEmbed.Build());

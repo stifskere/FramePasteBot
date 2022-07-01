@@ -33,7 +33,7 @@ public class CustomMethods
 
     public static Random Random = new Random();
 
-    public int NowTime = (int) (new TimeSpan(DateTime.Now.Ticks) - new TimeSpan(new DateTime(1970, 1, 1).Ticks)).TotalSeconds;
+    public static int NowTime => (int) (DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
 
     public static uint GetEmbedColor()
     {
