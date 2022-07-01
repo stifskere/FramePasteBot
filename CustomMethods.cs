@@ -38,7 +38,7 @@ public class CustomMethods
     public static uint GetEmbedColor()
     {
         uint color = 0;
-        SQLiteDataReader embedColorRead = DataBase.RunSqliteQueryCommand("SELECT * FROM Configuration WHERE key = 'EmbedColor'");
+        using SQLiteDataReader embedColorRead = DataBase.RunSqliteQueryCommand("SELECT * FROM Configuration WHERE key = 'EmbedColor'");
         while (embedColorRead.Read())
         {
             color = uint.Parse(embedColorRead.GetString(1), System.Globalization.NumberStyles.HexNumber);
