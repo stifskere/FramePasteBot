@@ -35,10 +35,35 @@ public class CustomMethods
 
     public static ulong NowTime => (ulong) (DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
 
-    public static uint GetEmbedColor(string type = "EmbedColor")
+    public enum EmbedColors
     {
+        EmbedGreenColor,
+        EmbedRedColor,
+        EmbedDefaultColor
+    }
+    
+    public static string EmbedGreenColor { get; } = "EmbedGreenColor";
+    public static string EmbedRedColor { get; } = "EmbedRedColor";
+    public static string EmbedDefaultColor { get; } = "EmbedColor"; 
+    
+    public static uint GetEmbedColor(EmbedColors type = EmbedColors.EmbedDefaultColor)
+    {
+        string colorType = "";
+        switch (type)
+        {
+            case(EmbedColors.EmbedDefaultColor):
+                colorType = "EmbedColor";
+                break;
+            case(EmbedColors.EmbedGreenColor):
+                colorType = "EmbedGreenColor";
+                break;
+            case(EmbedColors.EmbedRedColor):
+                colorType = "EmbedRedColor";
+                break;
+        }
+        
         uint color = 0;
-        using SQLiteDataReader embedColorRead = DataBase.RunSqliteQueryCommand($"SELECT * FROM Configuration WHERE key = '{type}'");
+        using SQLiteDataReader embedColorRead = DataBase.RunSqliteQueryCommand($"SELECT * FROM Configuration WHERE key = '{colorType}'");
         while (embedColorRead.Read())
         {
             color = uint.Parse(embedColorRead.GetString(1), System.Globalization.NumberStyles.HexNumber);
@@ -48,11 +73,13 @@ public class CustomMethods
         return color;
     }
 
-    public static async void SendLog(Embed? embed = null, string? text = null)
+    public static async void SendLog(Embed? embed = null, string? text = null, bool caseLog = false)
     {
         ITextChannel logsChannel = (ITextChannel)Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString())).Channels.First(c => c.Id == ulong.Parse(LoadConfig().Channels.Logs.ToString()));
+        ITextChannel caseLogsChannel = (ITextChannel)Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString())).Channels.First(c => c.Id == ulong.Parse(LoadConfig().Channels.Case.ToString()));
         if (embed == null && text == null) throw new Exception("Log can't be empty");
         await logsChannel.SendMessageAsync(embed: embed, text: text);
+        if (caseLog) await caseLogsChannel.SendMessageAsync(embed: embed, text: text);
     }
     
     

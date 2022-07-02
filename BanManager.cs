@@ -58,7 +58,7 @@ public class BanManager
                        unBanEmbed = unBanEmbed
                            .WithTitle($"{userId} was unbanned")
                            .WithTitle($"**Reason:** Time expired\n**Ban reason:** {banData.GetString(3)}\n**Case ID:** {banData.GetInt32(0)}")
-                           .WithColor(GetEmbedColor("EmbedGreenColor"));
+                           .WithColor(GetEmbedColor(EmbedColors.EmbedGreenColor));
                    }
                    
                    DataBase.RunSqliteNonQueryCommand($"DELETE FROM Cases WHERE UserId = {userId}");

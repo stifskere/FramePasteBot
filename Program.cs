@@ -1,5 +1,6 @@
 ﻿global using static FPB.Config;
 global using static FPB.CustomMethods;
+global using static FPB.Bot;
 using Discord;
 using Discord.WebSocket;
 using Newtonsoft.Json;

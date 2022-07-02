@@ -44,14 +44,12 @@ public class Ban : InteractionModuleBase<SocketInteractionContext>
         EmbedBuilder banEmbed = new EmbedBuilder()
             .WithTitle($"{user.DisplayName}#{user.Discriminator} was banned")
             .WithDescription($"**The user was banned for:** {bannedTime}\n**with the reason:** {reason}\n**Case Id:** {GetLastCaseId()}")
-            .WithColor(GetEmbedColor("EmbedRedColor"));
+            .WithColor(GetEmbedColor(EmbedColors.EmbedRedColor));
         
         ulong banTimeStamp = NowTime + (ulong)banTime;
-        
-        Console.WriteLine(banTimeStamp);
 
         DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, Time, Type) VALUES({user.Id}, {Context.User.Id}, '{reason}', {(banTime == 0 ? null : banTimeStamp)}, 'Ban')");
-        SendLog(embed: banEmbed.Build());
+        SendLog(embed: banEmbed.Build(), caseLog: true);
         banHandler.NewBanCounter(user, (long)banTimeStamp);
 
         banEmbed = banEmbed.WithThumbnailUrl("https://c.tenor.com/tkJk3Ui_OBIAAAAC/ban-hammer.gif");
