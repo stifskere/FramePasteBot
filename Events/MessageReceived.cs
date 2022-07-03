@@ -75,7 +75,7 @@ public class ModMail
             .WithColor(GetEmbedColor());
 
         ComponentBuilder userControls = new ComponentBuilder()
-            .WithButton(new ButtonBuilder(label: "close", style: ButtonStyle.Danger, customId: "closeModMail"));
+            .WithButton(new ButtonBuilder(label: "close", style: ButtonStyle.Danger, customId: "closeModMailUser"));
 
         await message.Channel.SendMessageAsync(embed: modMailEmbed.Build(), components: userControls.Build());
 
@@ -89,10 +89,10 @@ public class ModMail
         await ((ITextChannel)modMailChannel).SendMessageAsync(embed: moderatorModMailEmbed.Build());
 
         IMessage referenceMessage = ((ITextChannel)modMailChannel).GetMessagesAsync(limit: 1).FirstAsync().Result.First();
-
+        
         ((ITextChannel)modMailChannel).CreateThreadAsync(message.Author.Id.ToString(), message: referenceMessage).Wait();
 
-        IThreadChannel thread = ((ITextChannel)modMailChannel).Guild.GetThreadChannelsAsync().Result.First();
+        IThreadChannel thread = ((ITextChannel)modMailChannel).Guild.GetThreadChannelsAsync().Result.First(t => t.Position < 20);
 
         EmbedBuilder threadModMailEmebd = new EmbedBuilder()
             .WithTitle("ModMail controls")
@@ -100,7 +100,7 @@ public class ModMail
             .WithColor(GetEmbedColor());
 
         ComponentBuilder controlComponents = new ComponentBuilder()
-            .WithButton(new ButtonBuilder(label: "close", style: ButtonStyle.Danger, customId: "closeModMail"))
+            .WithButton(new ButtonBuilder(label: "close", style: ButtonStyle.Danger, customId: "closeModMailModerator"))
             .WithButton(new ButtonBuilder(label: "block", style: ButtonStyle.Secondary, customId: "blockUserModMail"));
 
         await thread.SendMessageAsync(embed: threadModMailEmebd.Build(), components: controlComponents.Build());
@@ -109,37 +109,38 @@ public class ModMail
         UserId = message.Author.Id;
     }
 
-    public ulong ThreadId = 0;
-    public ulong UserId = 0;
+    public static async void CloseModMailAsync(IGuild guild, string who)
+    {
+        IThreadChannel thread = guild.GetThreadChannelsAsync().Result.First(t => t.Id == ThreadId);
+        IUser user = guild.GetUsersAsync().Result.First(u => u.Id == UserId);
+
+        EmbedBuilder closeEmbed = new EmbedBuilder()
+            .WithTitle($"Communication portal closed by {who}")
+            .WithColor(GetEmbedColor(EmbedColors.EmbedRedColor))
+            .WithDescription("If you want to open a new communication portal simply write another message in this channel.");
+
+        await user.SendMessageAsync(embed: closeEmbed.Build());
+
+        closeEmbed = closeEmbed.WithDescription("This thread will be archived, reopening it won't re enable the communication portal");
+
+        await thread.SendMessageAsync(embed: closeEmbed.Build());
+    }
+
+    public static ulong ThreadId;
+    public static ulong UserId;
 }
 
 class ModMailComponents : InteractionModuleBase<SocketInteractionContext>
 {
-    [ComponentInteraction("closeModMail")]
-    public async Task CloseModMailAsync()
+    [ComponentInteraction("closeModMailModerator")]
+    public static async void CloseModMailModeratorAsync()
     {
-        EmbedBuilder closeEmbed = new EmbedBuilder()
-            .WithTitle("This communication portal has been closed")
-            .WithColor(GetEmbedColor(EmbedColors.EmbedRedColor));
-        
-        Console.WriteLine(Context.Channel);
-        
-        if (Context.Channel.GetType() == typeof(IDMChannel))
-        {
-            closeEmbed = closeEmbed.WithDescription("To start another simply send another message in this channel.");
-            await Context.Channel.SendMessageAsync(embed: closeEmbed.Build());
+        Console.WriteLine("Closed by moderators");
+    }
 
-            SocketThreadChannel thread = Client.Guilds.First(g => g.Id == LoadConfig().GuildId.ToString()).ThreadChannels.First(c => c.Id == MessageReceived.ActiveMailList[Context.User.Id].ThreadId);
-            
-            closeEmbed = closeEmbed.WithDescription("This thread has been closed by the user, it will be left by the bot and it will remain inactive, there is nothing to do to reactivate the thread.");
-            await thread.SendMessageAsync(embed: closeEmbed.Build());
-
-            await thread.LeaveAsync();
-        }
-        else if (Context.Channel.GetType() == typeof(SocketThreadChannel))
-        {
-            closeEmbed = closeEmbed.WithDescription("This thread has been closed, it will be left by the bot and it will remain inactive, there is nothing to do to reactivate the thread.");
-            await Context.Channel.SendMessageAsync(embed: closeEmbed.Build());
-        }
+    [ComponentInteraction("closeModMailUser")]
+    public static async void CloseModMailUserAsync()
+    {
+        Console.WriteLine("Closed by user");
     }
 }
