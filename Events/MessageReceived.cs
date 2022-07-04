@@ -53,7 +53,17 @@ public static class MessageReceived
         }
         else
         {
-            
+            Console.WriteLine(message.Channel.GetType());
+            if (message.Channel.GetType() == typeof(IThreadChannel))
+            {
+                Console.WriteLine("thread");
+                ActiveMailList[ulong.Parse(message.Channel.Name)].SendMessageAsync(false, message);
+            }
+            else
+            {
+                Console.WriteLine("user");
+                ActiveMailList[message.Author.Id].SendMessageAsync(true, message);
+            }
         }
     }
 
@@ -74,10 +84,9 @@ public class ModMail
             .WithDescription("Start writing messages in this channel to communicate with the moderators.\n\nYou can press the button below to close the communication thread with the moderators.")
             .WithColor(GetEmbedColor());
 
-        ComponentBuilder userControls = new ComponentBuilder()
-            .WithButton(new ButtonBuilder().WithCustomId("closeModMailUser").WithLabel("Close").WithStyle(ButtonStyle.Danger));
+        ComponentBuilder userControls = new ComponentBuilder().WithButton(new ButtonBuilder().WithCustomId("closeModMailUser").WithLabel("Close").WithStyle(ButtonStyle.Danger));
 
-        await message.Channel.SendMessageAsync(embed: modMailEmbed.Build(), components: userControls.Build());
+        IUserMessage firstUserMessage = await message.Channel.SendMessageAsync(embed: modMailEmbed.Build(), components: userControls.Build());
 
         SocketGuildChannel modMailChannel = Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString())).Channels.First(c => c.Id == ulong.Parse(LoadConfig().Channels.ModMail.ToString()));
 
@@ -105,11 +114,30 @@ public class ModMail
 
         ThreadId = thread.Id;
         UserId = message.Author.Id;
+        FirstUserMessage = firstUserMessage;
     }
 
-    public static async void CloseModMailAsync(IGuild guild, string who)
+    public async void SendMessageAsync(bool isUser, IMessage message)
     {
+        IGuild guild = Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString()));
+        
+        if (isUser)
+        {
+            IThreadChannel thread = guild.GetThreadChannelsAsync().Result.First(t => t.Id == ThreadId);
+            await thread.SendMessageAsync($"From {message.Author.Username}:\n{message.Content}");
+        }
+        else
+        {
+            IUser user = guild.GetUsersAsync().Result.First(u => u.Id == UserId);
+            await user.SendMessageAsync($"from {message.Author}:\n{message.Content}");
+        }
+    }
+    
+    public async void CloseModMailAsync(string who, bool blocked = false)
+    {
+        IGuild guild = Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString()));
         IThreadChannel thread = guild.GetThreadChannelsAsync().Result.First(t => t.Id == ThreadId);
+        Console.WriteLine(thread.Name);
         IUser user = guild.GetUsersAsync().Result.First(u => u.Id == UserId);
 
         EmbedBuilder closeEmbed = new EmbedBuilder()
@@ -119,15 +147,20 @@ public class ModMail
 
         await user.SendMessageAsync(embed: closeEmbed.Build());
 
+        if (blocked) closeEmbed = closeEmbed.WithTitle("User blocked and communication portal closed.");
         closeEmbed = closeEmbed.WithDescription("This thread will be archived, reopening it won't re enable the communication portal");
 
         await thread.SendMessageAsync(embed: closeEmbed.Build());
 
-        await thread.GetMessagesAsync(limit: Int32.MaxValue).FirstAsync().Result.Last().DeleteAsync();
+        int threadCount = thread.GetMessagesAsync(limit: Int32.MaxValue).FirstAsync().Result.Count;
+        await thread.GetMessagesAsync(limit: threadCount - 1).FirstAsync().Result.Last().DeleteAsync();
         
         await thread.ModifyAsync(t => t.Archived = true);
+
+        await ((IUserMessage)FirstUserMessage).ModifyAsync(m => m.Components = new ComponentBuilder().Build());
     }
 
+    public static IMessage FirstUserMessage;
     public static ulong ThreadId;
     public static ulong UserId;
 }
@@ -137,12 +170,23 @@ public class ModMailComponents : InteractionModuleBase<SocketInteractionContext>
     [ComponentInteraction("closeModMailModerator")]
     public async Task CloseModMailModeratorAsync()
     {
-        Console.WriteLine("Closed by moderators");
+        await DeferAsync();
+        await DeleteOriginalResponseAsync();
+        MessageReceived.ActiveMailList[ulong.Parse(Context.Channel.Name)].CloseModMailAsync("the moderators");
     }
 
     [ComponentInteraction("closeModMailUser")]
     public async Task CloseModMailUserAsync()
     {
-        Console.WriteLine("Closed by user");
+        await DeferAsync();
+        await DeleteOriginalResponseAsync();
+        MessageReceived.ActiveMailList[ulong.Parse(Context.User.Id.ToString())].CloseModMailAsync("the user");
+    }
+
+    [ComponentInteraction("blockUserModMail")]
+    public async Task BlockUserAsync()
+    {
+        DataBase.RunSqliteNonQueryCommand($"INSERT INTO BlockedUsers(UserId) VALUES({Context.Channel.Name})");
+        MessageReceived.ActiveMailList[ulong.Parse(Context.User.Id.ToString())].CloseModMailAsync("the user", true);
     }
 }
