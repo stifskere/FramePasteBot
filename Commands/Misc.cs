@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Data.SQLite;
+using Discord;
 using Discord.Interactions;
 
 namespace FPB.Commands;
@@ -31,5 +32,20 @@ public class Misc : InteractionModuleBase<SocketInteractionContext>
     {
         await RespondAsync("k", ephemeral: true);
         await Context.Channel.SendMessageAsync($"<@{user.Id}> had their honorary ban revoked!");
+    }
+    
+    [SlashCommand("yeestercounter", "View the last time timestamp Mr.Yeester sent a message")]
+    public async Task YessterCounterAsync()
+    {
+        SQLiteDataReader counter = DataBase.RunSqliteQueryCommand("SELECT value FROM Configuration WHERE key = 'YeesterCounter'");
+        long timeStamp = 0;
+        while (counter.Read()) timeStamp = counter.GetInt64(0);
+        EmbedBuilder counterEmbed = new EmbedBuilder()
+            .WithTitle("Mr.Yeester counter")
+            .WithDescription($"The last time yeester talked was <t:{timeStamp}:R>")
+            .WithColor(GetEmbedColor());
+
+        await RespondAsync(embed: counterEmbed.Build());
+        
     }
 }

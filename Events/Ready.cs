@@ -39,5 +39,6 @@ public static class Ready
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedColor', 'ffff00')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedRedColor', 'ff0000')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedGreenColor', '00ff00')");}catch{/*exists*/}
+        try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('YeesterCounter', '0')");}catch{/*exists*/}
     }
 }

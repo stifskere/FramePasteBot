@@ -14,7 +14,7 @@ public class AddBannedWord : InteractionModuleBase<SocketInteractionContext>
     [ModalInteraction("bwmd")]
     public async Task modalResponseAsync(BannedWordsModal modal)
     {
-        string[] words = modal.words.Split(",");
+        string[] words = modal.Words!.Split(",");
         List<string> validWords = new();
         List<string> invalidWords = new();
 
@@ -31,6 +31,6 @@ public class AddBannedWord : InteractionModuleBase<SocketInteractionContext>
         public string Title { get; } = "Add banned words";
 
         [InputLabel("Banned words (separate by , no spaces)"), ModalTextInput("wordsInput", maxLength: 50)]
-        public string words { get; set; }
+        public string? Words { get; set; }
     }
 }
