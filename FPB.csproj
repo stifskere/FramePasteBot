@@ -11,6 +11,7 @@
       <PackageReference Include="Discord.Net" Version="3.7.2" />
       <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
       <PackageReference Include="System.Windows.Extensions" Version="7.0.0-preview.5.22301.12" />
+      <PackageReference Include="Z.Expressions.Eval" Version="4.0.85" />
     </ItemGroup>
 
     <ItemGroup>

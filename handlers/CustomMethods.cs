@@ -1,5 +1,6 @@
 ﻿using System.Data.SQLite;
 using Discord;
+using Discord.WebSocket;
 using Newtonsoft.Json;
 using static FPB.Bot;
 
@@ -90,5 +91,10 @@ public static class UserMethods
     public static async Task<string> GetBannerUrlAsync(this IUser user, int size = 512)
     {
         return $"https://cdn.discordapp.com/banners/{user.Id}/{((dynamic) await HttpRequest(url: $"https://discord.com/api/v8/users/{user.Id}", new Dictionary<string, string> {{"Authorization", $"Bot {LoadConfig().Token.ToString()}"}})).banner}.gif?size={size}";
+    }
+
+    public static string GetTag(this IUser user)
+    {
+        return $"{user.Username}#{user.Discriminator}";
     }
 }
