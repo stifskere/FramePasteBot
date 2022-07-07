@@ -1,13 +1,11 @@
 ﻿using System.Data.SQLite;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using Discord;
 using Discord.WebSocket;
 using FPB.handlers;
 
 namespace FPB.Events;
 
-public class MessageReceived
+public static class MessageReceived
 {
     public static async Task Event(SocketMessage message)
     {
@@ -19,6 +17,7 @@ public class MessageReceived
         }
 
         bool isChannelNameParseable;
+        // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
         try {ulong.Parse(message.Channel.Name); isChannelNameParseable = true;}catch{isChannelNameParseable = false;}
         
         if (isChannelNameParseable && ModMailDictionary.ContainsKey(ulong.Parse(message.Channel.Name)))
