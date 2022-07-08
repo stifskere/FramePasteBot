@@ -1,6 +1,7 @@
 ﻿using System.Data.SQLite;
 using Discord;
 using Discord.Interactions;
+using FPB.handlers;
 
 namespace FPB.Commands;
 

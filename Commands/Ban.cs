@@ -1,7 +1,6 @@
-﻿using System.Data.SQLite;
-using ColorCat;
-using Discord;
+﻿using Discord;
 using Discord.Interactions;
+using FPB.handlers;
 
 namespace FPB.Commands;
 
@@ -12,6 +11,8 @@ public class Ban : InteractionModuleBase<SocketInteractionContext>
     {
         string bannedTime = "undefined time";
         int banTime = 0;
+        
+        reason = reason.Replace("'", "");
         
         if (time != "")
         {
@@ -39,33 +40,23 @@ public class Ban : InteractionModuleBase<SocketInteractionContext>
             }
         }
         
-        await user.BanAsync(reason: reason);
+        await user.BanAsync(reason: $"Case {GetLastCaseId()} - reason: {reason}, time: {time}");
 
         EmbedBuilder banEmbed = new EmbedBuilder()
-            .WithTitle($"{user.DisplayName}#{user.Discriminator} was banned")
-            .WithDescription($"**The user was banned for:** {bannedTime}\n**with the reason:** {reason}\n**Case Id:** {GetLastCaseId()}")
-            .WithColor(GetEmbedColor(EmbedColors.EmbedRedColor));
+            .WithTitle($"{user.GetTag()} was banned")
+            .WithDescription($"**The user was banned for:** `{bannedTime}`\n**With the reason:** `{reason}`\n**Case Id:** `{GetLastCaseId()}`\n**UserID:** `{user.Id}`")
+            .WithColor(GetEmbedColor(EmbedColors.EmbedRedColor))
+            .WithFooter(text: "Ban")
+            .WithCurrentTimestamp();
         
         ulong banTimeStamp = NowTime + (ulong)banTime;
 
-        DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, Time, Type) VALUES({user.Id}, {Context.User.Id}, '{reason}', {(banTime == 0 ? null : banTimeStamp)}, 'Ban')");
+        DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, RemovalTime, Type, PunishmentTime) VALUES({user.Id}, {Context.User.Id}, '{reason}', {(banTime == 0 ? 0 : banTimeStamp)}, 'Ban', {NowTime})");
         SendLog(embed: banEmbed.Build(), caseLog: true);
         banHandler.NewBanCounter(user, (long)banTimeStamp);
 
         banEmbed = banEmbed.WithThumbnailUrl("https://c.tenor.com/tkJk3Ui_OBIAAAAC/ban-hammer.gif");
         
         await RespondAsync(embed: banEmbed.Build());
-    }
-
-    private int GetLastCaseId()
-    {
-        int caseId = 0;
-        SQLiteDataReader caseRead = DataBase.RunSqliteQueryCommand("SELECT * FROM sqlite_sequence WHERE name = 'Cases'");
-        while (caseRead.Read())
-        {
-            caseId = caseRead.GetInt32(0);
-            break;
-        }
-        return caseId;
     }
 }

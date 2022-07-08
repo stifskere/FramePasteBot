@@ -1,5 +1,6 @@
-﻿namespace FPB;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
+
+namespace FPB.handlers;
 
 public class DataBaseHandler : IDisposable
 {

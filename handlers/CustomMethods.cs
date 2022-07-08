@@ -1,10 +1,8 @@
 ﻿using System.Data.SQLite;
 using Discord;
-using Discord.WebSocket;
 using Newtonsoft.Json;
-using static FPB.Bot;
 
-namespace FPB;
+namespace FPB.handlers;
 
 public class CustomMethods
 {
@@ -83,7 +81,17 @@ public class CustomMethods
         if (caseLog) await caseLogsChannel.SendMessageAsync(embed: embed, text: text);
     }
     
-    
+    public static int GetLastCaseId()
+    {
+        int caseId = 0;
+        SQLiteDataReader caseRead = DataBase.RunSqliteQueryCommand("SELECT Id FROM Cases ORDER BY Id DESC");
+        while (caseRead.Read())
+        {
+            caseId = caseRead.GetInt32(0);
+            break;
+        }
+        return caseId;
+    }
 }
 
 public static class UserMethods

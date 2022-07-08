@@ -1,10 +1,9 @@
 ﻿using System.Data.SQLite;
 using Discord;
 using Discord.WebSocket;
-using static FPB.Bot;
 using ConnectionState = Discord.ConnectionState;
 
-namespace FPB;
+namespace FPB.handlers;
 
 public class BanManager
 {
@@ -12,7 +11,7 @@ public class BanManager
     private static Dictionary<ulong, long> TimerDict = new();
     public BanManager()
     {
-        SQLiteDataReader bans = DataBase.RunSqliteQueryCommand("SELECT * FROM Cases WHERE Type = 'Ban' AND Time != 0");
+        SQLiteDataReader bans = DataBase.RunSqliteQueryCommand("SELECT * FROM Cases WHERE Type = 'Ban' AND RemovalTime != 0");
         while (bans.Read())
         {
             if(TimerDict.ContainsKey((ulong)bans.GetInt64(1))) continue;

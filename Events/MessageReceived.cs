@@ -1,5 +1,7 @@
-﻿using System.Data.SQLite;
+﻿using System.ComponentModel;
+using System.Data.SQLite;
 using Discord;
+using Discord.Interactions;
 using Discord.WebSocket;
 using FPB.handlers;
 
@@ -7,9 +9,11 @@ namespace FPB.Events;
 
 public static class MessageReceived
 {
+    public static IMessage eventMessage;
     public static async Task Event(SocketMessage message)
     {
         if (message.Author.IsBot) return;
+        eventMessage = message;
         if (message.Channel.GetType() == typeof(SocketDMChannel))
         {
             await DmCase(message);
@@ -52,11 +56,45 @@ public static class MessageReceived
 
         if (!ModMailDictionary.ContainsKey(message.Author.Id))
         {
-            ModMailDictionary.Add(message.Author.Id, new ModMailHandler(message));
+            EmbedBuilder startQuestionEmbed = new EmbedBuilder()
+                .WithTitle("You are going to start a ModMail")
+                .WithDescription("Are you sure you want to start a Mail?")
+                .WithColor(GetEmbedColor());
+
+            ComponentBuilder startQuestionComponents = new ComponentBuilder()
+                .WithButton(new ButtonBuilder().WithLabel("Yes").WithEmote(new Emoji("✔️")).WithStyle(ButtonStyle.Success).WithCustomId("StartModMail"))
+                .WithButton(new ButtonBuilder().WithLabel("No").WithEmote(new Emoji("❌")).WithStyle(ButtonStyle.Danger).WithCustomId("DontStartModMail"));
+
+            await message.Channel.SendMessageAsync(embed: startQuestionEmbed.Build(), components: startQuestionComponents.Build());
         }
         else
         {
            await ModMailDictionary[message.Author.Id].SendMessageAsync(message, true);
         }
+    }
+}
+
+public class StartModMailComponents : InteractionModuleBase<SocketInteractionContext>
+{
+    [ComponentInteraction("StartModMail")]
+    public async Task StartModMailAsync()
+    {
+        await DeferAsync();
+        
+        IUserMessage originalMessage = await GetOriginalResponseAsync();
+
+        await originalMessage.ModifyAsync(m => m.Components = new Optional<MessageComponent>(new ComponentBuilder().Build()));
+        
+        MessageReceived.ModMailDictionary.Add(MessageReceived.eventMessage.Author.Id, new ModMailHandler(MessageReceived.eventMessage));
+    }
+
+    [ComponentInteraction("DontStartModMail")]
+    public async Task DontStartModMailASync()
+    {
+        await DeferAsync();
+        
+        IUserMessage originalMessage = await GetOriginalResponseAsync();
+        
+        await originalMessage.ModifyAsync(m => m.Components = new Optional<MessageComponent>(new ComponentBuilder().Build()));
     }
 }

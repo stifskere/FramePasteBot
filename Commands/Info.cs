@@ -24,4 +24,10 @@ public class Info : InteractionModuleBase<SocketInteractionContext>
 
         await RespondAsync(embed: askEmbed.Build(), allowedMentions: new AllowedMentions(allowedTypes: null));
     }
+
+    [SlashCommand("hwinfo", "Gives a link to download HW-Info")]
+    public async Task HwInfoAsync()
+    {
+        await RespondAsync("https://www.hwinfo.com/", allowedMentions: new AllowedMentions(allowedTypes: null));
+    }
 }
