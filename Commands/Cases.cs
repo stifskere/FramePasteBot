@@ -8,11 +8,11 @@ namespace FPB.Commands;
 
 public class Cases : InteractionModuleBase<SocketInteractionContext>
 {
-    private ButtonBuilder buttonRight = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("➡️")).WithCustomId("ButtonRight").WithLabel("Next");
-    private ButtonBuilder buttonLeft = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("⬅️")).WithCustomId("ButtonLeft").WithLabel("Back");
+    private readonly ButtonBuilder _buttonRight = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("➡️")).WithCustomId("ButtonRight").WithLabel("Next");
+    private readonly ButtonBuilder _buttonLeft = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("⬅️")).WithCustomId("ButtonLeft").WithLabel("Back");
     
-    private ButtonBuilder buttonRightDisabled = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("➡️")).WithCustomId("ButtonRight").WithLabel("Next").WithDisabled(true);
-    private ButtonBuilder buttonLeftDisabled = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("⬅️")).WithCustomId("ButtonLeft").WithLabel("Back").WithDisabled(true);
+    private readonly ButtonBuilder _buttonRightDisabled = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("➡️")).WithCustomId("ButtonRight").WithLabel("Next").WithDisabled(true);
+    private readonly ButtonBuilder _buttonLeftDisabled = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("⬅️")).WithCustomId("ButtonLeft").WithLabel("Back").WithDisabled(true);
     
     private static List<List<string[]>> CasesList = new();
     private static Dictionary<ulong, EmbedCounter> EmbedCounters = new();
@@ -74,7 +74,7 @@ public class Cases : InteractionModuleBase<SocketInteractionContext>
         
         casesEmbed = CasesList[0].Aggregate(casesEmbed, (current, modCase) => current.AddField(modCase[0], modCase[1]));
 
-        await RespondAsync(embed: casesEmbed.Build(), components: CasesList.Count == 1 ? null : new ComponentBuilder().WithButton(buttonRight).Build());
+        await RespondAsync(embed: casesEmbed.Build(), components: CasesList.Count == 1 ? null : new ComponentBuilder().WithButton(_buttonRight).Build());
 
         ulong messageId = GetOriginalResponseAsync().Result.Id;
         EmbedCounters.Add(messageId, new EmbedCounter());
@@ -103,10 +103,10 @@ public class Cases : InteractionModuleBase<SocketInteractionContext>
         casesEmbed = CasesList[EmbedCounters[message.Id].Page].Aggregate(casesEmbed, (current, modCase) => current.AddField(modCase[0], modCase[1]));
 
         ComponentBuilder newButtons = new ComponentBuilder();
-        newButtons = CasesList.ElementAtOrDefault(EmbedCounters[message.Id].Page + 1) != null ? newButtons.WithButton(buttonLeft).WithButton(buttonRight) : newButtons.WithButton(buttonLeft);
+        newButtons = CasesList.ElementAtOrDefault(EmbedCounters[message.Id].Page + 1) != null ? newButtons.WithButton(_buttonLeft).WithButton(_buttonRight) : newButtons.WithButton(_buttonLeft);
 
         ComponentBuilder newButtonsDisabled = new ComponentBuilder();
-        newButtonsDisabled = CasesList.ElementAtOrDefault(EmbedCounters[message.Id].Page + 1) != null ? newButtonsDisabled.WithButton(buttonLeftDisabled).WithButton(buttonRightDisabled) : newButtonsDisabled.WithButton(buttonLeftDisabled);
+        newButtonsDisabled = CasesList.ElementAtOrDefault(EmbedCounters[message.Id].Page + 1) != null ? newButtonsDisabled.WithButton(_buttonLeftDisabled).WithButton(_buttonRightDisabled) : newButtonsDisabled.WithButton(_buttonLeftDisabled);
         
         await message.ModifyAsync(m => m.Components = new Optional<MessageComponent>(newButtonsDisabled.Build()));
         await message.ModifyAsync(m => m.Embed = casesEmbed.Build());
@@ -135,10 +135,10 @@ public class Cases : InteractionModuleBase<SocketInteractionContext>
         casesEmbed = CasesList[EmbedCounters[message.Id].Page].Aggregate(casesEmbed, (current, modCase) => current.AddField(modCase[0], modCase[1]));
 
         ComponentBuilder newButtons = new ComponentBuilder();
-        newButtons = CasesList.ElementAtOrDefault(EmbedCounters[message.Id].Page - 1) != null ? newButtons.WithButton(buttonLeft).WithButton(buttonRight) : newButtons.WithButton(buttonRight);
+        newButtons = CasesList.ElementAtOrDefault(EmbedCounters[message.Id].Page - 1) != null ? newButtons.WithButton(_buttonLeft).WithButton(_buttonRight) : newButtons.WithButton(_buttonRight);
 
         ComponentBuilder newButtonsDisabled = new ComponentBuilder();
-        newButtonsDisabled = CasesList.ElementAtOrDefault(EmbedCounters[message.Id].Page - 1) != null ? newButtonsDisabled.WithButton(buttonLeftDisabled).WithButton(buttonRightDisabled) : newButtonsDisabled.WithButton(buttonLeftDisabled);
+        newButtonsDisabled = CasesList.ElementAtOrDefault(EmbedCounters[message.Id].Page - 1) != null ? newButtonsDisabled.WithButton(_buttonLeftDisabled).WithButton(_buttonRightDisabled) : newButtonsDisabled.WithButton(_buttonLeftDisabled);
 
         
         await message.ModifyAsync(m => m.Components = new Optional<MessageComponent>(newButtonsDisabled.Build()));

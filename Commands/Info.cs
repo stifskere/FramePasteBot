@@ -30,4 +30,25 @@ public class Info : InteractionModuleBase<SocketInteractionContext>
     {
         await RespondAsync("https://www.hwinfo.com/", allowedMentions: new AllowedMentions(allowedTypes: null));
     }
+
+    [SlashCommand("timenames", "Explains the time names used in commands for this bot.")]
+    public async Task TimeNamesAsync()
+    {
+        EmbedBuilder timesEmbed = new EmbedBuilder()
+            .WithTitle("Time names")
+            .WithDescription("Time names are a way to express an amount of time, eg 1 hour `1h`\n\nThe supported time names include\n1 Minute - `1m`\n1 Hour - `1h`\n1 Day - `1d`\n1 Week - `1w`\n\nSince 1 month is 4 weeks you can just add 8 weeks if you want 2 months.\nIn this bot there is no `1m 15s` yet since i used the default c# methods to achieve times and i didn't make any handler.")
+            .WithColor(GetEmbedColor());
+
+        await RespondAsync(embed: timesEmbed.Build(), allowedMentions: new AllowedMentions(allowedTypes: null));
+    }
+
+    [SlashCommand("win", "Shows how to create windows 10 installation media")]
+    public async Task WindowsInstallationAsync()
+    {
+        EmbedBuilder installWinEmbed = new EmbedBuilder()
+            .WithTitle("How to create a windows 10 installation media")
+            .WithDescription("");
+    }
+    
+    
 }
