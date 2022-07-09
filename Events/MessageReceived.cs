@@ -9,11 +9,11 @@ namespace FPB.Events;
 
 public static class MessageReceived
 {
-    public static IMessage eventMessage;
+    public static IMessage? EventMessage;
     public static async Task Event(SocketMessage message)
     {
         if (message.Author.IsBot) return;
-        eventMessage = message;
+        EventMessage = message;
         if (message.Channel.GetType() == typeof(SocketDMChannel))
         {
             await DmCase(message);
@@ -85,7 +85,7 @@ public class StartModMailComponents : InteractionModuleBase<SocketInteractionCon
 
         await originalMessage.ModifyAsync(m => m.Components = new Optional<MessageComponent>(new ComponentBuilder().Build()));
         
-        MessageReceived.ModMailDictionary.Add(MessageReceived.eventMessage.Author.Id, new ModMailHandler(MessageReceived.eventMessage));
+        MessageReceived.ModMailDictionary.Add(MessageReceived.EventMessage!.Author.Id, new ModMailHandler(MessageReceived.EventMessage));
     }
 
     [ComponentInteraction("DontStartModMail")]

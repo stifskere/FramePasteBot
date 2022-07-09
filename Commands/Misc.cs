@@ -78,7 +78,7 @@ public class Misc : InteractionModuleBase<SocketInteractionContext>
     private static readonly Dictionary<ulong, bool> CancellationRequest = new();
 
     [SlashCommand("rps", "Rock - Paper - scissors")]
-    public async Task RPSAsync([Choice("Rock - It's gray, you can hold it with your hand", "rock"), Choice("Paper - It folds, it's white... it has a unreadable message.", "paper"), Choice("Scissors - That scissors are sharp", "scissors")]string move)
+    public async Task RpsAsync([Choice("Rock - It's gray, you can hold it with your hand", "rock"), Choice("Paper - It folds, it's white... it has a unreadable message.", "paper"), Choice("Scissors - That scissors are sharp", "scissors")]string move)
     {
         if (!RpsChannel.ContainsKey(Context.Channel.Id))
         {
@@ -135,6 +135,4 @@ public class Misc : InteractionModuleBase<SocketInteractionContext>
         RpsMoves.Remove(message.Channel.Id);
         RpsPlayers.Remove(message.Channel.Id);
     }
-    
-    
 }

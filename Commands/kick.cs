@@ -4,7 +4,7 @@ using FPB.handlers;
 
 namespace FPB.Commands;
 
-public class kick : InteractionModuleBase<SocketInteractionContext>
+public class Kick : InteractionModuleBase<SocketInteractionContext>
 {
     [SlashCommand("kick", "Kicks a specified user"), DefaultMemberPermissions(GuildPermission.KickMembers)]
     public async Task KickAsync(IGuildUser user, string reason = "A reason was not defined")
@@ -22,7 +22,7 @@ public class kick : InteractionModuleBase<SocketInteractionContext>
             .WithFooter(text: "Kick")
             .WithCurrentTimestamp();
         
-        SendLog(embed: kickEmbed.Build(), caseLog: true);
+        await SendLog(embed: kickEmbed.Build(), caseLog: true);
 
         kickEmbed = kickEmbed.WithThumbnailUrl("https://tenor.com/view/oh-yeah-high-kick-take-down-fight-gif-14272509");
         

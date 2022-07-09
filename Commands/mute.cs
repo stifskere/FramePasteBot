@@ -4,7 +4,7 @@ using FPB.handlers;
 
 namespace FPB.Commands;
 
-public class mute : InteractionModuleBase<SocketInteractionContext>
+public class Mute : InteractionModuleBase<SocketInteractionContext>
 {
     [SlashCommand("mute", "Mutes a specified user"), DefaultMemberPermissions(GuildPermission.MuteMembers)]
     public async Task MuteAsync(IGuildUser user, string time, string reason = "A reason was not defined")
@@ -46,7 +46,7 @@ public class mute : InteractionModuleBase<SocketInteractionContext>
             .WithFooter(text: "Mute")
             .WithCurrentTimestamp();
         
-        SendLog(embed: muteEmbed.Build(), caseLog: true);
+        await SendLog(embed: muteEmbed.Build(), caseLog: true);
 
         muteEmbed = muteEmbed.WithThumbnailUrl("https://tenor.com/view/turn-down-volume-mute-volume-gif-14268149");
         

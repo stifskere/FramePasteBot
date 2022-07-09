@@ -11,13 +11,14 @@ public static class Ready
     private static InteractionService? _commands;
     public static async Task Event()
     {
-        Console.WriteLine($"Bot started as {Bot.Client.CurrentUser.Username}");
+        Console.WriteLine($"Bot started as {Client.CurrentUser.Username}");
         await Task.Run(() => CreateDataBaseTables(DataBase));
         Client.InteractionCreated += InteractionCreated;
         _commands = new InteractionService(Client);
         _commands.SlashCommandExecuted += SlashCommandExecuted;
         await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), null);
         await _commands.RegisterCommandsToGuildAsync(ulong.Parse(LoadConfig().GuildId.ToString()), true);
+        BanHandler = new BanManager();
     }
     
     private static async Task InteractionCreated(SocketInteraction interaction)

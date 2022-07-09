@@ -72,13 +72,13 @@ public class CustomMethods
         return color;
     }
 
-    public static async void SendLog(Embed? embed = null, string? text = null, bool caseLog = false)
+    public static async Task SendLog(Embed? embed = null, string? text = null, bool caseLog = false, MessageComponent? components = null)
     {
         ITextChannel logsChannel = (ITextChannel)Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString())).Channels.First(c => c.Id == ulong.Parse(LoadConfig().Channels.Logs.ToString()));
         ITextChannel caseLogsChannel = (ITextChannel)Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString())).Channels.First(c => c.Id == ulong.Parse(LoadConfig().Channels.Case.ToString()));
         if (embed == null && text == null) throw new Exception("Log can't be empty");
         await logsChannel.SendMessageAsync(embed: embed, text: text);
-        if (caseLog) await caseLogsChannel.SendMessageAsync(embed: embed, text: text);
+        if (caseLog) await caseLogsChannel.SendMessageAsync(embed: embed, text: text, components: components);
     }
     
     public static int GetLastCaseId()

@@ -15,7 +15,7 @@ public static class Bot
         return MainAsync(LoadConfig().Token.ToString());
     }
 
-    public static readonly DiscordSocketClient Client = new(new DiscordSocketConfig {GatewayIntents = GatewayIntents.All});
+    public static readonly DiscordSocketClient Client = new(new DiscordSocketConfig {GatewayIntents = GatewayIntents.All, MessageCacheSize = 100});
 
     private static async Task MainAsync(string token)
     {
@@ -23,6 +23,7 @@ public static class Bot
         Client.Log += Events.Log.Event;
         Client.MessageReceived += Events.MessageReceived.Event;
         Client.MessageDeleted += Events.MessageDeleted.Event;
+        Client.MessageUpdated += Events.MessageUpdated.Event;
 
         await Client.LoginAsync(TokenType.Bot, token);
         await Client.StartAsync();
@@ -39,6 +40,6 @@ public static class Config
         return JsonConvert.DeserializeObject(file.ReadToEnd())!;
     }
 
-    public static DataBaseHandler DataBase = new DataBaseHandler($"./Databases/{LoadConfig().GuildId.ToString()}.db");
-    public static BanManager banHandler = new BanManager();
+    public static readonly DataBaseHandler DataBase = new DataBaseHandler($"./Databases/{LoadConfig().GuildId.ToString()}.db");
+    public static BanManager? BanHandler;
 }

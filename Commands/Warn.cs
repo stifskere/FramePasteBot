@@ -20,7 +20,7 @@ public class Warn : InteractionModuleBase<SocketInteractionContext>
             .WithFooter(text: "Warn")
             .WithCurrentTimestamp();
         
-        SendLog(embed: warnEmbed.Build(), caseLog: true);
+        await SendLog(embed: warnEmbed.Build(), caseLog: true);
 
         warnEmbed = warnEmbed.WithThumbnailUrl("https://external-preview.redd.it/Dt0PTbhOIidp83QTEfTn00dVUgxmJTDSPJJSLA4JUhg.png?format=pjpg&auto=webp&s=1c0f1bbe0e74840928b059568ed4332e06e54a6f");
         

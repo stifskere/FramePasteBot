@@ -12,7 +12,7 @@ public class AddBannedWord : InteractionModuleBase<SocketInteractionContext>
     }
 
     [ModalInteraction("bwmd")]
-    public async Task modalResponseAsync(BannedWordsModal modal)
+    public async Task ModalResponseAsync(BannedWordsModal modal)
     {
         string[] words = modal.Words!.Split(",");
         List<string> validWords = new();

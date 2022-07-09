@@ -63,7 +63,7 @@ public class BanManager
                    DataBase.RunSqliteNonQueryCommand($"DELETE FROM Cases WHERE UserId = {userId}");
                    TimerDict.Remove(userId);
                    
-                   SendLog(embed: unBanEmbed.Build());
+                   await SendLog(embed: unBanEmbed.Build());
                 }
             }
 
