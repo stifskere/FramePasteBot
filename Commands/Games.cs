@@ -84,3 +84,11 @@ public class Games : InteractionModuleBase<SocketInteractionContext>
     
     //Tic tac toe
 }
+
+public static class GameMessageEvents
+{
+    public static async Task Event(IMessage message)
+    {
+        
+    }
+}

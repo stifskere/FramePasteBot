@@ -22,6 +22,7 @@ public static class Bot
         Client.Ready += Events.Ready.Event;
         Client.Log += Events.Log.Event;
         Client.MessageReceived += Events.MessageReceived.Event;
+        Client.MessageReceived += Commands.GameMessageEvents.Event;
         Client.MessageDeleted += Events.MessageDeleted.Event;
         Client.MessageUpdated += Events.MessageUpdated.Event;
 
