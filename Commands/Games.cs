@@ -7,7 +7,7 @@ using Group = Discord.Interactions.GroupAttribute;
 
 namespace FPB.Commands;
 
-[Group("", "")]
+[Group("games", "bot games commands")]
 public class Games : InteractionModuleBase<SocketInteractionContext>
 {
     //rock paper scissors
@@ -32,27 +32,33 @@ public class Games : InteractionModuleBase<SocketInteractionContext>
             RpsMoves.Add(Context.Channel.Id, move);
             EmbedBuilder rpsEmbed = new EmbedBuilder()
                 .WithTitle("RPS")
-                .WithDescription("Rps game started, someone else has to re run the command to play, this will end in 30 seconds.")
+                .WithDescription($"**{Context.User.GetTag()} started a RPS game**\n someone else has to re run the command to play, the interaction will end in 30 seconds.")
                 .WithColor(GetEmbedColor());
-            await RespondAsync(embed: rpsEmbed.Build());
-            RpsMessage.Add(Context.Channel.Id, await GetOriginalResponseAsync());
+            var firstMessage = await Context.Channel.SendMessageAsync(embed: rpsEmbed.Build());
+            RpsMessage.Add(Context.Channel.Id, firstMessage);
             RpsChannel.Add(Context.Channel.Id, Task.Run(async () => RemoveRpsAsync(await GetOriginalResponseAsync())));
+            await DeferAsync();
+            await DeleteOriginalResponseAsync();
         }
         else
         {
             if (RpsPlayers[Context.Channel.Id].Id == Context.User.Id)
             {
-                await RespondAsync("You can't play alone goblin.");
+                await RespondAsync("You can't play alone goblin.", ephemeral: true);
+                RpsChannel.Remove(Context.Channel.Id);
+                RpsMoves.Remove(Context.Channel.Id);
+                RpsMessage.Remove(Context.Channel.Id);
+                RpsPlayers.Remove(Context.Channel.Id);
                 return;
             }
             CancellationRequest[Context.Channel.Id] = true;
-            RpsChannel.Remove(Context.Channel.Id);
 
             EmbedBuilder rpsEmbed = new EmbedBuilder()
                 .WithTitle("RPS")
                 .WithDescription($"Rps game ended, all players submitted\n\n**{Context.User.GetTag()}** - used `{move}`\n**{RpsPlayers[Context.Channel.Id].GetTag()}** - used `{RpsMoves[Context.Channel.Id]}`")
                 .WithColor(GetEmbedColor());
             await RpsMessage[Context.Channel.Id].ModifyAsync(m => m.Embed = new Optional<Embed>(rpsEmbed.Build()));
+            RpsChannel.Remove(Context.Channel.Id);
             RpsMoves.Remove(Context.Channel.Id);
             RpsMessage.Remove(Context.Channel.Id);
             RpsPlayers.Remove(Context.Channel.Id);
@@ -87,8 +93,9 @@ public class Games : InteractionModuleBase<SocketInteractionContext>
 
 public static class GameMessageEvents
 {
-    public static async Task Event(IMessage message)
+    public static Task Event(IMessage message)
     {
         
+        return Task.CompletedTask;
     }
 }

@@ -76,9 +76,9 @@ public class CustomMethods
     {
         ITextChannel logsChannel = (ITextChannel)Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString())).Channels.First(c => c.Id == ulong.Parse(LoadConfig().Channels.Logs.ToString()));
         ITextChannel caseLogsChannel = (ITextChannel)Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString())).Channels.First(c => c.Id == ulong.Parse(LoadConfig().Channels.Case.ToString()));
-        if (embed == null && text == null) throw new Exception("Log can't be empty");
-        await logsChannel.SendMessageAsync(embed: embed, text: text);
-        if (caseLog) await caseLogsChannel.SendMessageAsync(embed: embed, text: text, components: components);
+        if (embed == null && text == null && components == null) throw new Exception("Log can't be empty");
+        await logsChannel.SendMessageAsync(embed: embed, text: text, components: components);
+        if (caseLog) await caseLogsChannel.SendMessageAsync(embed: embed, text: text);
     }
     
     public static int GetLastCaseId()
