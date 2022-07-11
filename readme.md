@@ -38,10 +38,15 @@ here is a description of what every config value does.
 |-----------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------|
 | Token           | String | This is the token of the bot you can get in https://dev.discord.com                                                                           |
 | Guild ID        | Ulong  | The guild id the bot will be running on.                                                                                                      |
-| Yeester ID      | Ulong  | This is the ID that MrYeester has, you can set it to 0 if you don't want to have any "yeester counter" (if set to 0 the command will disable) |
+| Yeester ID      | Ulong  | This is the ID that MrYeester has, you can set it to 0 if you don't want to have any "Yeester counter" (if set to 0 the command will disable) |
 | Channels.Logs   | Ulong  | This is the logs channel.                                                                                                                     |
 | Channels.Case   | Ulong  | This is the cases channel, can be set to the same as logs and it will send the cases in the logs channel.                                     |
 | Channel.ModMail | Ulong  | This is where all the ModMails will be received.                                                                                              |
 
+### Disclaimer
 
+if you touch anything in the bot that destroys your server it is not my problem, so don't come to FramePaste server talking about it.
 
+if you need support with the bot i can help you on that, but i'm not in charge if you do something that destroys your server
+
+the latest release may not be up to date to the repo at all
