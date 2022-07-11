@@ -10,7 +10,7 @@ or go to the releases page and download a pre released version of the bot.
 
 ### Downloading the code
 
-there are some packages used in this bot, some of them are private but you can ask Memw#6969 for them in the [framepaste](https://www.discord.gg/WbCcVYpebY) server.
+there are some packages used in this bot, some of them are private but you can find them in a folder inside the bot files preaplied to the project.
 
 the following packages are needed to edit the bot:
 
