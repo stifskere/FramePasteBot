@@ -25,4 +25,6 @@ public static class Config
 
     public static readonly DataBaseHandler DataBase = new DataBaseHandler($"./Databases/{LoadConfig().GuildId.ToString()}.db");
     public static BanManager? BanHandler;
+    public static Dictionary<string, int> CommandUses = new();
+    public static ulong UpTime = 0;
 }

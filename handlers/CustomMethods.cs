@@ -32,7 +32,7 @@ public class CustomMethods
 
     public static Random Random = new Random();
 
-    public static ulong NowTime => (ulong) (DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
+    public static ulong NowTime { get; set; } = (ulong) (DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
 
     public enum EmbedColors
     {
@@ -40,11 +40,7 @@ public class CustomMethods
         EmbedRedColor,
         EmbedDefaultColor
     }
-    
-    public static string EmbedGreenColor { get; } = "EmbedGreenColor";
-    public static string EmbedRedColor { get; } = "EmbedRedColor";
-    public static string EmbedDefaultColor { get; } = "EmbedColor"; 
-    
+
     public static uint GetEmbedColor(EmbedColors type = EmbedColors.EmbedDefaultColor)
     {
         string colorType = "";

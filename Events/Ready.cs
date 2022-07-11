@@ -19,6 +19,9 @@ public static class Ready
         await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), null);
         await _commands.RegisterCommandsToGuildAsync(ulong.Parse(LoadConfig().GuildId.ToString()), true);
         BanHandler = new BanManager();
+        #pragma warning disable CS4014
+        Task.Run(UpTimeUpdater);
+        #pragma warning restore CS4014
     }
     
     private static async Task InteractionCreated(SocketInteraction interaction)
@@ -29,6 +32,8 @@ public static class Ready
     private static Task SlashCommandExecuted(SlashCommandInfo info, IInteractionContext context, IResult result)
     {
         if(result.Error != null) Console.WriteLine(result.ErrorReason);
+        if (!CommandUses.ContainsKey(info.Module.Name)) CommandUses.Add(info.Module.Name, 0);
+        CommandUses[info.Module.Name]++;
         return Task.CompletedTask;
     }
 
@@ -42,5 +47,15 @@ public static class Ready
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedRedColor', 'ff0000')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedGreenColor', '00ff00')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('YeesterCounter', '0')");}catch{/*exists*/}
+    }
+
+    private static async void UpTimeUpdater()
+    {
+        while (Client.ConnectionState == ConnectionState.Connected)
+        {
+            await Task.Delay(1);
+            UpTime++;
+            NowTime++;
+        }
     }
 }
