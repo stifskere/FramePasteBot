@@ -1,6 +1,6 @@
-# Framepaste Bot
+# FramePaste Bot
 
-A discord bot recoding in c# for the original framepaste bot made in JS
+A discord bot recoding in c# for the original FramePaste bot made in JS
 
 ### Downloading the bot
 
@@ -16,10 +16,10 @@ the following packages are needed to edit the bot:
 
 | Package name       | Description                                                          |
 |--------------------|----------------------------------------------------------------------|
-| Discord.net        | The discord api wraper used for the bot.                             |
+| Discord.net        | The discord api wrapper used for the bot.                            |
 | ColorCat (private) | A color converting class library made by my friend SenyorGato#7759   |
 | System.Data.Sqlite | The database utility package used to write / read databases.         |
-| Z.Expresions.Eval  | Some eval utility, there is no much use for it so it may be removed. |
+| Z.Expressions.Eval | Some eval utility, there is no much use for it so it may be removed. |
 
 ### Usage
 
