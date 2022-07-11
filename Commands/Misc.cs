@@ -38,6 +38,11 @@ public class Misc : InteractionModuleBase<SocketInteractionContext>
     [SlashCommand("yeestercounter", "View the last time timestamp Mr.Yeester sent a message")]
     public async Task YessterCounterAsync()
     {
+        if (ulong.Parse(LoadConfig().YeesterId.ToString()) == 0)
+        {
+            await RespondAsync("This command is disabled.", ephemeral: true);
+            return;
+        }
         SQLiteDataReader counter = DataBase.RunSqliteQueryCommand("SELECT value FROM Configuration WHERE key = 'YeesterCounter'");
         long timeStamp = 0;
         while (counter.Read()) timeStamp = counter.GetInt64(0);
