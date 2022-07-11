@@ -3,8 +3,6 @@ global using static FPB.handlers.CustomMethods;
 global using static FPB.Bot;
 using Discord;
 using Discord.WebSocket;
-using FPB.handlers;
-using Newtonsoft.Json;
 
 namespace FPB;
 
@@ -30,17 +28,4 @@ public static class Bot
         await Client.StartAsync();
         await Task.Delay(-1);
     }
-}
-
-public static class Config
-{
-    public static dynamic LoadConfig()
-    {
-        if (!File.Exists("Config.json")) File.Create("Config.json");
-        using StreamReader file = new StreamReader("Config.json");
-        return JsonConvert.DeserializeObject(file.ReadToEnd())!;
-    }
-
-    public static readonly DataBaseHandler DataBase = new DataBaseHandler($"./Databases/{LoadConfig().GuildId.ToString()}.db");
-    public static BanManager? BanHandler;
 }
