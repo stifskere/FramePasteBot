@@ -45,6 +45,8 @@ public class Info : InteractionModuleBase<SocketInteractionContext>
     [SlashCommand("win", "Shows how to create windows 10 installation media")]
     public async Task WindowsInstallationAsync()
     {
+        await RespondAsync("Command not implemented yet", ephemeral: true);
+        
         EmbedBuilder installWinEmbed = new EmbedBuilder()
             .WithTitle("How to create a windows 10 installation media")
             .WithDescription("");
