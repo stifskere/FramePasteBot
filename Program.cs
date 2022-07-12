@@ -23,6 +23,7 @@ public static class Bot
         Client.MessageReceived += Commands.GameMessageEvents.Event;
         Client.MessageDeleted += Events.MessageDeleted.Event;
         Client.MessageUpdated += Events.MessageUpdated.Event;
+        Client.UserJoined += Events.UserJoined.Event;
 
         await Client.LoginAsync(TokenType.Bot, token);
         await Client.StartAsync();
