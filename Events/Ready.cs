@@ -31,7 +31,7 @@ public static class Ready
     
     private static Task SlashCommandExecuted(SlashCommandInfo info, IInteractionContext context, IResult result)
     {
-        if(result.Error != null) Console.WriteLine(result.ErrorReason);
+        if (result.Error != null) Console.WriteLine(result.ErrorReason);
         if (!CommandUses.ContainsKey(info.Module.Name)) CommandUses.Add(info.Module.Name, 0);
         CommandUses[info.Module.Name]++;
         return Task.CompletedTask;

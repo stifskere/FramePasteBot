@@ -94,7 +94,7 @@ public class CustomMethods
         int str1L = str1.Length;
         int str2L = str2.Length;
         if (Math.Min(str1L, str2L) == 0) return Math.Max(str1L, str2L);
-        return Math.Min(Math.Min(StringDistance(str1.Remove(str1L-2), str2) + 1, StringDistance(str1, str2.Remove(str2L-2)) + 1), StringDistance(str1.Remove(str1L-2), str2.Remove(str2L-2)) + str1 == str2 ? 0 : 1);
+        return Math.Min(Math.Min(StringDistance(str1.Remove(str1L-1), str2) + 1, StringDistance(str1, str2.Remove(str2L-1)) + 1), StringDistance(str1.Remove(str1L-1), str2.Remove(str2L-1)) + str1 == str2 ? 0 : 1);
     }
 }
 

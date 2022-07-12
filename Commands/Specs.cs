@@ -12,7 +12,7 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
     private Dictionary<string, string>? DataBaseReader(IUser user)
     {
         SQLiteDataReader content = DataBase.RunSqliteQueryCommand($"SELECT * FROM Specs WHERE userId = {user.Id}");
-        string readContent = "";
+        string readContent = "{}";
         while (content.Read()) readContent = content.GetString(1);
         return JsonConvert.DeserializeObject<Dictionary<string, string>>(readContent);
     }
@@ -80,6 +80,7 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
             foreach (string dictKey in specsRead.Keys)
             {
                 int distance = StringDistance(key, dictKey);
+                Console.WriteLine(distance);
                 if (distance < minDistance)
                 {
                     minDistance = distance;
