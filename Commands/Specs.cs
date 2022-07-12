@@ -89,15 +89,10 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
 
             removeEmbed = removeEmbed.WithColor(GetEmbedColor(EmbedColors.EmbedRedColor));
 
-            if (closestKey == "")
-            {
-                removeEmbed = removeEmbed.WithDescription("**No key found with this name**\n\ntry searching with other words\n remember: SeArCh Is CaSe SeNsItIvE");
-            }
-            else
-            {
-                removeEmbed = removeEmbed.WithDescription($"**No key found with this name**\n\ndid you mean {closestKey}?\n remember: SeArCh Is CaSe SeNsItIvE");
-            }
-            
+            removeEmbed = removeEmbed.WithDescription(closestKey == "" 
+                ? "**No key found with this name**\n\ntry searching with other words\n remember: SeArCh Is CaSe SeNsItIvE" 
+                : $"**No key found with this name**\n\ndid you mean {closestKey}?\n remember: SeArCh Is CaSe SeNsItIvE");
+
             await RespondAsync(embed: removeEmbed.Build());
             return;
         }
