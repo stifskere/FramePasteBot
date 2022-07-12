@@ -22,6 +22,11 @@ public static class Ready
         #pragma warning disable CS4014
         Task.Run(UpTimeUpdater);
         #pragma warning restore CS4014
+        SocketGuild guild = Client.GetGuild(ulong.Parse(LoadConfig().GuildId.ToString()));
+        foreach (var invite in await guild.GetInvitesAsync())
+        {
+            UserJoined.InviteCounts.Add(invite.Id, invite.Uses!.Value);
+        }
     }
     
     private static async Task InteractionCreated(SocketInteraction interaction)
