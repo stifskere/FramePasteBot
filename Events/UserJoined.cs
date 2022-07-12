@@ -7,8 +7,8 @@ namespace FPB.Events;
 
 public static class UserJoined
 {
-    public static Dictionary<string, int> InviteCounts = new();
-    public static Dictionary<ulong, RestInviteMetadata> InviteCodes = new();
+    public static readonly Dictionary<string, int> InviteCounts = new();
+    private static readonly Dictionary<ulong, RestInviteMetadata> InviteCodes = new();
     public static async Task Event(SocketGuildUser user)
     {
         foreach (RestInviteMetadata invite in await user.Guild.GetInvitesAsync())
@@ -22,7 +22,7 @@ public static class UserJoined
             .WithTitle($"Member joined: {user.GetTag()}")
             .WithDescription($"<@{user.Id}>\n`{user.Id}`")
             .AddField("🔹 Account creation date",$"<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:f>\n<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:R>")
-            .AddField("🔹 **Invite data**", $"invite: `{InviteCodes[user.Id].Code}`")
+            .AddField("🔹 **Invite data**", $"**Invite:** `{InviteCodes[user.Id].Code}\n**Created by:** {InviteCodes[user.Id].Inviter.GetTag()}`")
             .WithColor(GetEmbedColor());
 
         await SendLog(embed: joinEmbed.Build());
