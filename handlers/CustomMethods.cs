@@ -102,6 +102,7 @@ public static class UserMethods
 {
     public static async Task<string> GetBannerUrlAsync(this IUser user, int size = 512)
     {
+        // ReSharper disable once RedundantCast
         return $"https://cdn.discordapp.com/banners/{user.Id}/{((dynamic) await HttpRequest(url: $"https://discord.com/api/v8/users/{user.Id}", new Dictionary<string, string> {{"Authorization", $"Bot {LoadConfig().Token.ToString()}"}})).banner}.gif?size={size}";
     }
 
