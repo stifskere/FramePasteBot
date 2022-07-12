@@ -43,6 +43,7 @@ public static class Ready
         db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Cases(Id INTEGER PRIMARY KEY AUTOINCREMENT, UserId INTEGER, ModeratorId INTEGER, Reason STRING, RemovalTime INT, Type STRING, PunishmentTime INT)");
         db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Configuration(key STRING, value STRING, UNIQUE(key))");
         db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS BlockedUsers(UserId INT, unique(UserId))");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Specs(userId INT, list STRING, unique(userId))");
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedColor', 'ffff00')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedRedColor', 'ff0000')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedGreenColor', '00ff00')");}catch{/*exists*/}
