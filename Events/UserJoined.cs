@@ -11,6 +11,11 @@ public static class UserJoined
     {
         EmbedBuilder joinEmbed = new EmbedBuilder()
             .WithTitle($"Member joined: {user.GetTag()}")
-            .WithDescription($"<@{user.Id}>\n`{user.Id}`\n\n🔹 **Account creation date**\n<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:f>\n<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:R>\n\n🔹 **Invite data**\ninvite: `{((IGuildUser)user).}`");
+            .WithDescription($"<@{user.Id}>\n`{user.Id}`")
+            .AddField("🔹 Account creation date",$"<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:f>\n<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:R>")
+            .AddField("🔹 **Invite data**", "invite: ``")
+            .WithColor(GetEmbedColor());
+
+        await SendLog(embed: joinEmbed.Build());
     }
 }
