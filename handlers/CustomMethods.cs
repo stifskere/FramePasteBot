@@ -91,10 +91,15 @@ public class CustomMethods
 
     public static int StringDistance(string str1, string str2)
     {
-        int str1L = str1.Length;
-        int str2L = str2.Length;
-        if (Math.Min(str1L, str2L) == 0) return Math.Max(str1L, str2L);
-        return Math.Min(Math.Min(StringDistance(str1.Remove(str1L-1), str2) + 1, StringDistance(str1, str2.Remove(str2L-1)) + 1), StringDistance(str1.Remove(str1L-1), str2.Remove(str2L-1)) + str1 == str2 ? 0 : 1);
+        int str1L = str1.Length - 1;
+        int str2L = str2.Length - 1;
+        return StringDistance(str1, str1L, str2, str2L);
+    }
+
+    private static int StringDistance(string str1, int pos1, string str2, int pos2)
+    {
+        if (Math.Min(pos1, pos2) == 0) return Math.Max(pos1, pos2);
+        return Math.Min(Math.Min(StringDistance(str1, pos1 - 1, str2, pos2) + 1, StringDistance(str1, pos1, str2, pos2 - 1)) + 1, StringDistance(str1, pos1 - 1, str2, pos2 - 1) + (str1[pos1] == str2[pos2] ? 0 : 1));
     }
 }
 

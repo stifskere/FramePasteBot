@@ -80,7 +80,6 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
             foreach (string dictKey in specsRead.Keys)
             {
                 int distance = StringDistance(key, dictKey);
-                Console.WriteLine(distance);
                 if (distance < minDistance)
                 {
                     minDistance = distance;
