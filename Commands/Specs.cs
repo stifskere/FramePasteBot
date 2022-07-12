@@ -65,19 +65,39 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
     }
 
     [SlashCommand("remove", "Remove specs from your list")]
-    public async Task RemoveAsync([MaxLength(20)]string key)
+    public async Task RemoveAsync([MaxLength(20)] string key)
     {
         Dictionary<string, string> specsRead = DataBaseReader(Context.User) ?? new Dictionary<string, string>();
 
         EmbedBuilder removeEmbed = new EmbedBuilder()
             .WithTitle("Specs removal")
             .WithColor(GetEmbedColor());
-        
+
         if (!specsRead.ContainsKey(key))
         {
-            removeEmbed = removeEmbed
-                .WithDescription("**No key found with this name**\n\ntry searching with other words\n remember: SeArCh Is CaSe SeNsItIvE")
-                .WithColor(GetEmbedColor(EmbedColors.EmbedRedColor));
+            int minDistance = 3;
+            string closestKey = "";
+            foreach (string dictKey in specsRead.Keys)
+            {
+                int distance = StringDistance(key, dictKey);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestKey = dictKey;
+                }
+            }
+
+            removeEmbed = removeEmbed.WithColor(GetEmbedColor(EmbedColors.EmbedRedColor));
+
+            if (closestKey == "")
+            {
+                removeEmbed = removeEmbed.WithDescription("**No key found with this name**\n\ntry searching with other words\n remember: SeArCh Is CaSe SeNsItIvE");
+            }
+            else
+            {
+                removeEmbed = removeEmbed.WithDescription($"**No key found with this name**\n\ndid you mean {closestKey}?\n remember: SeArCh Is CaSe SeNsItIvE");
+            }
+            
             await RespondAsync(embed: removeEmbed.Build());
             return;
         }
@@ -86,9 +106,9 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
             .WithDescription($"**The following specs were removed**\n\n**{key}**\n{specsRead[key]}");
 
         specsRead.Remove(key);
-        
+
         DataBaseSetter(specsRead, Context.User);
-        
+
         await RespondAsync(embed: removeEmbed.Build());
     }
 

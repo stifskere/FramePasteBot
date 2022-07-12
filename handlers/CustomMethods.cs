@@ -88,6 +88,14 @@ public class CustomMethods
         }
         return caseId;
     }
+
+    public static int StringDistance(string str1, string str2)
+    {
+        int str1L = str1.Length;
+        int str2L = str2.Length;
+        if (Math.Min(str1L, str2L) == 0) return Math.Max(str1L, str2L);
+        return Math.Min(Math.Min(StringDistance(str1.Remove(str1L-2), str2) + 1, StringDistance(str1, str2.Remove(str2L-2)) + 1), StringDistance(str1.Remove(str1L-2), str2.Remove(str2L-2)) + str1 == str2 ? 0 : 1);
+    }
 }
 
 public static class UserMethods
