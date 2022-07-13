@@ -49,6 +49,8 @@ public static class Ready
         db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Configuration(key STRING, value STRING, UNIQUE(key))");
         db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS BlockedUsers(UserId INT, unique(UserId))");
         db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Specs(userId INT, list STRING, unique(userId))");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS CpuList(name STRING, brand STRING, price STRING, cores STRING ,threads STRING, base STRING, boost STRING, socket STRING, tdp STRING, unique(name))");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS GpuList(name STRING, price STRING, memoryInterface STRING, vram STRING, powerConnectors STRING, tdp STRING, imageUrl STRING, pcieLink STRING)");
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedColor', 'ffff00')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedRedColor', 'ff0000')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedGreenColor', '00ff00')");}catch{/*exists*/}

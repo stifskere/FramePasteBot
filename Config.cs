@@ -10,7 +10,7 @@ public static class Config
     {
         if (!File.Exists("Config.json"))
         {
-            using var configFile = File.Create("Config.json");
+            using FileStream configFile = File.Create("Config.json");
             byte[] configFill = new UTF8Encoding(true).GetBytes("{\n\"Token\": \"\",\n\"GuildId\": 0,\n\"YeesterId\": 0,\n  \"Channels\": {\n\"Logs\": 0,\n\"Case\": 0,\n\"ModMail\": 0\n }\n}");
             configFile.Write(configFill, 0, configFill.Length);
             
