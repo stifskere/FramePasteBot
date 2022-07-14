@@ -41,7 +41,7 @@ public class ModMailHandler
             .WithButton(new ButtonBuilder().WithCustomId("CloseModMail").WithStyle(ButtonStyle.Danger).WithLabel("Close mail"));
         
         _userMessage = await _user.SendMessageAsync(embed: notifyNewTicketEmbed.Build(), components: ticketControls.Build());
-        _guildMessage = await ModMailChannel.SendMessageAsync(embed: enteringModMailEmbed.Build(), text: $"<@&{LoadConfig().Roles.Mod.ToString()}>");
+        _guildMessage = await ModMailChannel.SendMessageAsync(embed: enteringModMailEmbed.Build(), text: $"<@{LoadConfig().Roles.Mod.ToString()}>");
         _modMailThread = await ModMailChannel.CreateThreadAsync(name: _user!.Id.ToString(), type: ThreadType.PublicThread, message: _guildMessage);
         await _modMailThread.SendMessageAsync(components: ticketControls.Build(), embed: threadTicketControls.Build());
     }

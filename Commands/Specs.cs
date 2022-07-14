@@ -62,6 +62,8 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
     [SlashCommand("add", "Add a spec to your list")]
     public async Task AddAsync([MaxLength(20)]string key, string value)
     {
+        key = key.Replace("'", "");
+        value = value.Replace("'", "");
         Dictionary<string, string> specsRead = DataBaseReader(Context.User) ?? new Dictionary<string, string>();
         specsRead.Add(key, value);
         DataBaseSetter(specsRead, Context.User);
@@ -75,6 +77,7 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
     [SlashCommand("remove", "Remove specs from your list")]
     public async Task RemoveAsync([MaxLength(20)] string key)
     {
+        key = key.Replace("'", "");
         Dictionary<string, string> specsRead = DataBaseReader(Context.User) ?? new Dictionary<string, string>();
 
         EmbedBuilder removeEmbed = new EmbedBuilder()
@@ -128,6 +131,8 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
     [SlashCommand("edit", "Edit specs from your list")]
     public async Task EditAsync([MaxLength(20)]string key, [Summary("new-value")]string value)
     {
+        key = key.Replace("'", "");
+        value = value.Replace("'", "");
         Dictionary<string, string> specsRead = DataBaseReader(Context.User) ?? new Dictionary<string, string>();
 
         EmbedBuilder editEmbed = new EmbedBuilder()
@@ -174,6 +179,8 @@ public class Specs : InteractionModuleBase<SocketInteractionContext>
             .AddField("After", key);
 
         await RespondAsync(embed: editEmbed.Build());
+
+        specsRead[key] = value;
         
         DataBase.RunSqliteNonQueryCommand($"UPDATE Specs SET list = '{specsRead}' WHERE userId = {Context.User.Id}");
     }
