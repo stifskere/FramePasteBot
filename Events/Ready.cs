@@ -25,7 +25,7 @@ public static class Ready
         SocketGuild guild = Client.GetGuild(ulong.Parse(LoadConfig().GuildId.ToString()));
         foreach (var invite in await guild.GetInvitesAsync())
         {
-            UserJoined.InviteCounts.Add(invite.Id, invite.Uses!.Value);
+            if(!UserJoined.InviteCounts.ContainsKey(invite.Id)) UserJoined.InviteCounts.Add(invite.Id, invite.Uses!.Value);
         }
     }
     
