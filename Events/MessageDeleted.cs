@@ -12,7 +12,7 @@ public static class MessageDeleted
         _channel = await cachedChannel.GetOrDownloadAsync();
         _message = (IUserMessage) await cachedMessage.GetOrDownloadAsync();
 
-        if (_message.Author.IsBot == false || _message.Content != null) await LogDeletion();
+        if (_message.Author.IsBot == false || _message.Content != "") await LogDeletion();
     }
 
     private static async Task LogDeletion()
