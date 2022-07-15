@@ -42,6 +42,7 @@ here is a description of what every config value does.
 | Channels.Logs   | Ulong  | This is the logs channel.                                                                                                                     |
 | Channels.Case   | Ulong  | This is the cases channel, can be set to the same as logs and it will send the cases in the logs channel.                                     |
 | Channel.ModMail | Ulong  | This is where all the ModMails will be received.                                                                                              |
+| Roles.Mod       | Ulong  | The server moderator role.                                                                                                                    |
 
 ### Disclaimer
 
