@@ -1,4 +1,5 @@
-# FramePaste Bot
+![Sin título-1](https://user-images.githubusercontent.com/79871802/179412198-91f21e85-6bfe-4cd1-85d7-e29928c1be3d.png)
+
 
 A discord bot recoding in c# for the original FramePaste bot made in JS
 
@@ -33,6 +34,8 @@ after you fill the config you can just leave the bot running, if there is any pr
 ### Config
 
 here is a description of what every config value does.
+
+Values are displayed dinamically typed
 
 | Value           | Type   | Description                                                                                                                                   |
 |-----------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------|
