@@ -27,6 +27,7 @@ public static class Ready
         {
             if(!UserJoined.InviteCounts.ContainsKey(invite.Id)) UserJoined.InviteCounts.Add(invite.Id, invite.Uses!.Value);
         }
+        await guild.DownloadUsersAsync();
     }
     
     private static async Task InteractionCreated(SocketInteraction interaction)

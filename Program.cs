@@ -13,7 +13,7 @@ public static class Bot
         return MainAsync(LoadConfig().Token.ToString());
     }
 
-    public static readonly DiscordSocketClient Client = new(new DiscordSocketConfig {GatewayIntents = GatewayIntents.All, MessageCacheSize = 100});
+    public static readonly DiscordSocketClient Client = new(new DiscordSocketConfig {GatewayIntents = GatewayIntents.All, MessageCacheSize = 100, AlwaysDownloadUsers = true});
 
     private static async Task MainAsync(string token)
     {

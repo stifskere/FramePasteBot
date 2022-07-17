@@ -14,30 +14,32 @@ public class Cases : InteractionModuleBase<SocketInteractionContext>
     private readonly ButtonBuilder _buttonRightDisabled = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("➡️")).WithCustomId("ButtonRight").WithLabel("Next").WithDisabled(true);
     private readonly ButtonBuilder _buttonLeftDisabled = new ButtonBuilder().WithStyle(ButtonStyle.Primary).WithEmote(new Emoji("⬅️")).WithCustomId("ButtonLeft").WithLabel("Back").WithDisabled(true);
     
-    private static List<List<string[]>> CasesList = new();
-    private static Dictionary<ulong, EmbedCounter> EmbedCounters = new();
+    private static readonly List<List<string[]>> CasesList = new();
+    private static readonly Dictionary<ulong, EmbedCounter> EmbedCounters = new();
     
     [SlashCommand("cases", "View all cases")]
-    public async Task ViewCasesAsync(IGuildUser? user = null, [Choice("Warn", "Warn"), Choice("Kick", "Kick"), Choice("Ban", "Ban"), Choice("Time Out", "Mute")]string? type = null)
+    public async Task ViewCasesAsync(IGuildUser? user = null, [Choice("Warn", "Warn"), Choice("Kick", "Kick"), Choice("Ban", "Ban"), Choice("Time Out", "Mute")]string? type = null, [Choice("From top to bottom", "ASC"), Choice("From bottom to top", "DESC")]string order = "ASC")
     {
         SocketGuild guild = Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString()));
         SQLiteDataReader casesData = DataBase.RunSqliteQueryCommand("SELECT * FROM Cases");
+
+        await Context.Guild.DownloadUsersAsync();
         
         if (user != null && type != null)
         {
-            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {user.Id} AND Type = '{type}'");
+            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {user.Id} AND Type = '{type}' ORDER BY Id {order}");
         }
         else if (user != null && type == null)
         {
-            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {user.Id}");
+            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {user.Id} ORDER BY Id {order}");
         }
         else if (user == null && type != null)
         {
-            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE Type = '{type}'");
+            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE Type = '{type}' ORDER BY Id {order}");
         }
         else if (user == null && type == null)
         {
-            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases");
+            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases ORDER BY Id {order}");
         }
         
         int listOneIndex = -1;
@@ -53,12 +55,22 @@ public class Cases : InteractionModuleBase<SocketInteractionContext>
                 listTwoIndex = 0;
             }
 
-            IGuildUser caseUser = guild.Users.First(u => u.Id == ulong.Parse(casesData.GetInt64(1).ToString()));
-            IGuildUser caseModerator = guild.Users.First(u => u.Id == ulong.Parse(casesData.GetInt64(2).ToString()));
+            IGuildUser? caseUser = null;
+            IGuildUser? caseModerator = null;
 
-            CasesList[listOneIndex].Add(new [] {$"Case {casesData.GetInt32(0)} | {casesData.GetString(5)}", $"**User:** {caseUser.GetTag()} - `{caseUser.Id}`\n**Moderator:** {caseModerator.GetTag()} - `{caseModerator.Id}`\n**Reason:** {casesData.GetString(3)}\n{(casesData.GetInt32(4) == 0 ? "":$"**Removed punishment at:** <t:{casesData.GetInt32(4)}:f>\n")}**Punishment time:** <t:{casesData.GetInt32(6)}:f>"});
-            
-            listTwoIndex++;
+            try
+            {
+                caseUser = guild.Users.FirstOrDefault(u => u.Id == ulong.Parse(casesData.GetInt64(1).ToString()));
+                caseModerator = guild.Users.FirstOrDefault(u => u.Id == ulong.Parse(casesData.GetInt64(2).ToString()));
+            }
+            catch
+            {
+                //not found.
+            }
+
+            CasesList[listOneIndex].Add(new[] {$"Case {casesData.GetInt32(0)} | {casesData.GetString(5)}", $"**User:** {(caseUser != null? caseUser.GetTag():"User not found.")} - `{casesData.GetInt64(1)}`\n**Moderator:** {(caseModerator != null? caseModerator.GetTag():"User not found.")} - `{casesData.GetInt64(2)}`\n**Reason:** {casesData.GetString(3)}\n{(casesData.GetInt64(4) == 0 ? "" : $"**Removed punishment at:** <t:{casesData.GetInt64(4)}:f>\n")}**Punishment time:** <t:{casesData.GetInt64(6)}:f>"});
+
+                listTwoIndex++;
         }
 
         EmbedBuilder casesEmbed = new EmbedBuilder()
