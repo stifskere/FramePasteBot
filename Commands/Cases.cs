@@ -24,22 +24,24 @@ public class Cases : InteractionModuleBase<SocketInteractionContext>
         SQLiteDataReader casesData = DataBase.RunSqliteQueryCommand("SELECT * FROM Cases");
 
         await Context.Guild.DownloadUsersAsync();
+
+        string defaultOrder = "ORDER BY Id ASC";
         
         if (user != null && type != null)
         {
-            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {user.Id} AND Type = '{type}' ORDER BY Id {order}");
+            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {user.Id} AND Type = '{type}' " + defaultOrder.Replace("ASC", order));
         }
         else if (user != null && type == null)
         {
-            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {user.Id} ORDER BY Id {order}");
+            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {user.Id} " + defaultOrder.Replace("ASC", order));
         }
         else if (user == null && type != null)
         {
-            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE Type = '{type}' ORDER BY Id {order}");
+            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE Type = '{type}' " + defaultOrder.Replace("ASC", order));
         }
         else if (user == null && type == null)
         {
-            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases ORDER BY Id {order}");
+            casesData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases " + defaultOrder.Replace("ASC", order));
         }
         
         int listOneIndex = -1;
@@ -55,18 +57,8 @@ public class Cases : InteractionModuleBase<SocketInteractionContext>
                 listTwoIndex = 0;
             }
 
-            IGuildUser? caseUser = null;
-            IGuildUser? caseModerator = null;
-
-            try
-            {
-                caseUser = guild.Users.FirstOrDefault(u => u.Id == ulong.Parse(casesData.GetInt64(1).ToString()));
-                caseModerator = guild.Users.FirstOrDefault(u => u.Id == ulong.Parse(casesData.GetInt64(2).ToString()));
-            }
-            catch
-            {
-                //not found.
-            }
+            IGuildUser? caseUser = guild.Users.FirstOrDefault(u => u.Id == ulong.Parse(casesData.GetInt64(1).ToString()));
+            IGuildUser? caseModerator = guild.Users.FirstOrDefault(u => u.Id == ulong.Parse(casesData.GetInt64(2).ToString()));
 
             CasesList[listOneIndex].Add(new[] {$"Case {casesData.GetInt32(0)} | {casesData.GetString(5)}", $"**User:** {(caseUser != null? caseUser.GetTag():"User not found.")} - `{casesData.GetInt64(1)}`\n**Moderator:** {(caseModerator != null? caseModerator.GetTag():"User not found.")} - `{casesData.GetInt64(2)}`\n**Reason:** {casesData.GetString(3)}\n{(casesData.GetInt64(4) == 0 ? "" : $"**Removed punishment at:** <t:{casesData.GetInt64(4)}:f>\n")}**Punishment time:** <t:{casesData.GetInt64(6)}:f>"});
 

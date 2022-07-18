@@ -23,10 +23,7 @@ public static class Ready
         Task.Run(UpTimeUpdater);
         #pragma warning restore CS4014
         SocketGuild guild = Client.GetGuild(ulong.Parse(LoadConfig().GuildId.ToString()));
-        foreach (var invite in await guild.GetInvitesAsync())
-        {
-            if(!UserJoined.InviteCounts.ContainsKey(invite.Id)) UserJoined.InviteCounts.Add(invite.Id, invite.Uses!.Value);
-        }
+        foreach (var invite in await guild.GetInvitesAsync()) if(!UserJoined.InviteCounts.ContainsKey(invite.Id)) UserJoined.InviteCounts.Add(invite.Id, invite.Uses!.Value);
         await guild.DownloadUsersAsync();
     }
     
