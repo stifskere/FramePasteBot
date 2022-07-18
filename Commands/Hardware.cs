@@ -11,7 +11,7 @@ public class Hardware : InteractionModuleBase<SocketInteractionContext>
         [SlashCommand("list", "Displays a list from a keyword")]
         public async Task ListAsync()
         {
-        
+            //doing hardware stuff
         }
 
         [SlashCommand("find", "Displays the exact hardware part if found")]
