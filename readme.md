@@ -50,7 +50,7 @@ Values are displayed dynamically typed
 
 In the config there is also some level roles, since this is a port from another bot the level roles are well, pre made roles that have to be assigned.
 
-all the level roles follow this dynamic standard inside Levels object
+all the level roles follow this dynamic standard inside Levels object, there is up to 15 levels
 
 | Value    | Type  | Description                                                                     |
 |----------|-------|---------------------------------------------------------------------------------|
@@ -60,6 +60,98 @@ all the level roles follow this dynamic standard inside Levels object
 
 Your config file should look something like this
 
+```json
+{
+  "Token": "Your discord bot token",
+  "GuildId": 0,
+  "YeesterId": 0,
+  "Channels": {
+    "Logs": 0,
+    "Case": 0,
+    "ModMail": 0
+  },
+  "Roles": {
+    "Mod": 0
+  },
+  "Levels" : {
+    "1":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "2":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "3":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "4":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "5":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "6":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "7":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "8":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "9":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "10":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "11":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "12":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "13":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "14":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    },
+    "15":{
+      "RoleId": 0,
+      "Time": 0,
+      "Messages": 0
+    }
+  }
+}
+```
 
 ### Disclaimer
 
