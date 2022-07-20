@@ -24,6 +24,7 @@ public static class Bot
         Client.MessageDeleted += Events.MessageDeleted.Event;
         Client.MessageUpdated += Events.MessageUpdated.Event;
         Client.UserJoined += Events.UserJoined.Event;
+        Client.MessagesBulkDeleted += Events.MessagesBulkDeleted.Event;
 
         await Client.LoginAsync(TokenType.Bot, token);
         await Client.StartAsync();

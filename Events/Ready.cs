@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Discord;
 using Discord.Interactions;
+using Discord.Rest;
 using Discord.WebSocket;
 using FPB.handlers;
 
@@ -23,7 +24,7 @@ public static class Ready
         Task.Run(UpTimeUpdater);
         #pragma warning restore CS4014
         SocketGuild guild = Client.GetGuild(ulong.Parse(LoadConfig().GuildId.ToString()));
-        foreach (var invite in await guild.GetInvitesAsync()) if(!UserJoined.InviteCounts.ContainsKey(invite.Id)) UserJoined.InviteCounts.Add(invite.Id, invite.Uses!.Value);
+        foreach (RestInviteMetadata invite in await guild.GetInvitesAsync()) if(!UserJoined.InviteCounts.ContainsKey(invite.Id)) UserJoined.InviteCounts.Add(invite.Id, invite.Uses!.Value);
         await guild.DownloadUsersAsync();
     }
     
@@ -42,13 +43,14 @@ public static class Ready
 
     private static void CreateDataBaseTables(DataBaseHandler db)
     {
-        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS BannedWords(BannedWord STRING, UNIQUE(BannedWord))");
-        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Cases(Id INTEGER PRIMARY KEY AUTOINCREMENT, UserId INTEGER, ModeratorId INTEGER, Reason STRING, RemovalTime INT, Type STRING, PunishmentTime INT)");
-        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Configuration(key STRING, value STRING, UNIQUE(key))");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS BannedWords(BannedWord TEXT, UNIQUE(BannedWord))");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Cases(Id INTEGER PRIMARY KEY AUTOINCREMENT, UserId INTEGER, ModeratorId INTEGER, Reason TEXT, RemovalTime INT, Type TEXT, PunishmentTime INT)");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Configuration(key TEXT, value TEXT, UNIQUE(key))");
         db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS BlockedUsers(UserId INT, unique(UserId))");
-        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Specs(userId INT, list STRING, unique(userId))");
-        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS CpuList(name STRING, brand STRING, price STRING, cores STRING ,threads STRING, base STRING, boost STRING, socket STRING, tdp STRING, unique(name))");
-        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS GpuList(name STRING, price STRING, memoryInterface STRING, vram STRING, powerConnectors STRING, tdp STRING, imageUrl STRING, pcieLink STRING)");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Specs(userId INTEGER, list TEXT, unique(userId))");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS CpuList(name TEXT, brand TEXT, price TEXT, cores TEXT ,threads TEXT, base TEXT, boost TEXT, socket TEXT, tdp TEXT, unique(name))");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS GpuList(name TEXT, price TEXT, memoryInterface TEXT, vram TEXT, powerConnectors TEXT, tdp TEXT, imageUrl TEXT, pcieLink TEXT)");
+        db.RunSqliteNonQueryCommand("CREATE TABLE IF NOT EXISTS Levels(Id INTEGER, Messages INTEGER, Days INTEGER, Level INTEGER)");
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedColor', 'ffff00')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedRedColor', 'ff0000')");}catch{/*exists*/}
         try{db.RunSqliteNonQueryCommand("INSERT INTO Configuration(key, value) VALUES('EmbedGreenColor', '00ff00')");}catch{/*exists*/}

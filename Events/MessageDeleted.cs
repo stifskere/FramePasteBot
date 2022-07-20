@@ -12,7 +12,8 @@ public static class MessageDeleted
         _channel = await cachedChannel.GetOrDownloadAsync();
         _message = (IUserMessage) await cachedMessage.GetOrDownloadAsync();
 
-        if (_message.Author.IsBot == false || _message.Content != "") await LogDeletion();
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (_message != null && (_message.Author.IsBot == false || _message.Content != "")) await LogDeletion();
     }
 
     private static async Task LogDeletion()
@@ -20,7 +21,7 @@ public static class MessageDeleted
         EmbedBuilder logDeletionEmbed = new EmbedBuilder()
             .WithTitle("Message Deleted!")
             .WithAuthor($"{_message!.Author.GetTag()} - {_message.Author.Id}", iconUrl: _message.Author.GetAvatarUrl())
-            .WithDescription($"<@{_message.Author.Id}> deleted a message\nwhich content was:\n```{_message.Content.Replace("`", "")}```\nin channel: <#{_channel!.Id}>")
+            .WithDescription($"<@{_message.Author.Id}> deleted a message\nwhich content was:\n```{_message.Content.Replace("`", "")}```\nin channel: {_channel!.GetMention()}")
             .WithCurrentTimestamp()
             .WithColor(GetEmbedColor(EmbedColors.EmbedRedColor));
 

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
@@ -38,9 +37,11 @@ public static class MessageReceived
             if (message.Content.Contains(insultsQuery.GetString(0)))
             {
                 await message.DeleteAsync();
-                break;
+                return;
             }
         }
+
+        new LevelHandler().CheckLevelAndCountMessage((IGuildUser?)message.Author);
     }
 
     public static Dictionary<ulong, ModMailHandler> ModMailDictionary = new();

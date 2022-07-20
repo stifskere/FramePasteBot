@@ -35,7 +35,7 @@ after you fill the config you can just leave the bot running, if there is any pr
 
 here is a description of what every config value does.
 
-Values are displayed dinamically typed
+Values are displayed dynamically typed
 
 | Value           | Type   | Description                                                                                                                                   |
 |-----------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -46,6 +46,20 @@ Values are displayed dinamically typed
 | Channels.Case   | Ulong  | This is the cases channel, can be set to the same as logs and it will send the cases in the logs channel.                                     |
 | Channel.ModMail | Ulong  | This is where all the ModMails will be received.                                                                                              |
 | Roles.Mod       | Ulong  | The server moderator role.                                                                                                                    |
+
+
+In the config there is also some level roles, since this is a port from another bot the level roles are well, pre made roles that have to be assigned.
+
+all the level roles follow this dynamic standard inside Levels object
+
+| Value    | Type  | Description                                                                     |
+|----------|-------|---------------------------------------------------------------------------------|
+| RoleId   | Ulong | This is the level role id                                                       |
+| Time     | Int   | This is the time in days the user needs to be in the server to reach the role   |
+| Messages | Ulong | This is the number of messages that the user needs to have to level up to there |
+
+Your config file should look something like this
+
 
 ### Disclaimer
 

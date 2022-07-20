@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace FPB.handlers;
 
-public class CustomMethods
+public static class CustomMethods
 {
     public static async Task<dynamic> HttpRequest(string url, Dictionary<string, string>? headers = null, string method = "GET")
     {
@@ -101,10 +101,7 @@ public class CustomMethods
         if (Math.Min(pos1, pos2) == 0) return Math.Max(pos1, pos2);
         return Math.Min(Math.Min(StringDistance(str1, pos1 - 1, str2, pos2) + 1, StringDistance(str1, pos1, str2, pos2 - 1)) + 1, StringDistance(str1, pos1 - 1, str2, pos2 - 1) + (str1[pos1] == str2[pos2] ? 0 : 1));
     }
-}
-
-public static class UserMethods
-{
+    
     public static async Task<string> GetBannerUrlAsync(this IUser user, int size = 512)
     {
         // ReSharper disable once RedundantCast
@@ -114,5 +111,10 @@ public static class UserMethods
     public static string GetTag(this IUser user)
     {
         return $"{user.Username}#{user.Discriminator}";
+    }
+
+    public static string GetMention(this IChannel channel)
+    {
+        return $"<#{channel.Id}>";
     }
 }
