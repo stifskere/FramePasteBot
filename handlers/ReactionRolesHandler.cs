@@ -9,7 +9,7 @@ public class ReactionRolesHandler : InteractionModuleBase<SocketInteractionConte
     [ComponentInteraction("ReactionRolesMenu")]
     public async Task ReactionRolesSelectMenuExecutedAsync(string id, string[] roles)
     {
-        string roleID = roles[0];
+        string roleId = roles[0];
     }
 }
 
