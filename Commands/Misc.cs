@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.SQLite;
 using Discord;
 using Discord.Interactions;
 using FPB.handlers;
@@ -76,5 +77,13 @@ public class Misc : InteractionModuleBase<SocketInteractionContext>
         await Context.Channel.SendMessageAsync(text);
     }
 
-    
+    [SlashCommand("google", "Search something on google")]
+    public async Task SearchOnGoogleAsync([Summary("Search", "What you want to search on google"), MaxLength(100)]string query)
+    {
+        EmbedBuilder searchEmbed = new EmbedBuilder()
+            .AddField($"Results for {query}", $"(click here to see your search results)[https://www.google.com/search?q={query.Replace(" ", "+")}]")
+            .WithColor(GetEmbedColor());
+
+        await RespondAsync(embed: searchEmbed.Build());
+    }
 }

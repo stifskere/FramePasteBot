@@ -17,7 +17,7 @@ public class Cases : InteractionModuleBase<SocketInteractionContext>
     private static readonly List<List<string[]>> CasesList = new();
     private static readonly Dictionary<ulong, EmbedCounter> EmbedCounters = new();
     
-    [SlashCommand("cases", "View all cases")]
+    [SlashCommand("cases", "View all cases"), DefaultMemberPermissions(GuildPermission.ManageMessages)]
     public async Task ViewCasesAsync(IGuildUser? user = null, [Choice("Warn", "Warn"), Choice("Kick", "Kick"), Choice("Ban", "Ban"), Choice("Time Out", "Mute")]string? type = null, [Choice("From top to bottom", "ASC"), Choice("From bottom to top", "DESC")]string order = "ASC")
     {
         SocketGuild guild = Client.Guilds.First(g => g.Id == ulong.Parse(LoadConfig().GuildId.ToString()));

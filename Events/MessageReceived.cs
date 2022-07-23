@@ -41,7 +41,15 @@ public static class MessageReceived
             }
         }
 
-        new LevelHandler().CheckLevelAndCountMessage((IGuildUser?)message.Author);
+        if (!LevelsDictionary.ContainsKey(message.Author.Id))
+        {
+            LevelsDictionary.Add(message.Author.Id, new LevelHandler((IGuildUser)message.Author));
+            LevelsDictionary[message.Author.Id].CheckLevelAndCountMessage();
+        }
+        else
+        {
+            LevelsDictionary[message.Author.Id].CheckLevelAndCountMessage();
+        }
     }
 
     public static Dictionary<ulong, ModMailHandler> ModMailDictionary = new();

@@ -37,15 +37,17 @@ here is a description of what every config value does.
 
 Values are displayed dynamically typed
 
-| Value           | Type   | Description                                                                                                                                   |
-|-----------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| Token           | String | This is the token of the bot you can get in https://dev.discord.com                                                                           |
-| GuildId         | Ulong  | The guild id the bot will be running on.                                                                                                      |
-| YeesterId       | Ulong  | This is the ID that MrYeester has, you can set it to 0 if you don't want to have any "Yeester counter" (if set to 0 the command will disable) |
-| Channels.Logs   | Ulong  | This is the logs channel.                                                                                                                     |
-| Channels.Case   | Ulong  | This is the cases channel, can be set to the same as logs and it will send the cases in the logs channel.                                     |
-| Channel.ModMail | Ulong  | This is where all the ModMails will be received.                                                                                              |
-| Roles.Mod       | Ulong  | The server moderator role.                                                                                                                    |
+| Value                 | Type   | Description                                                                                                                                   |
+|-----------------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| Token                 | String | This is the token of the bot you can get in https://dev.discord.com                                                                           |
+| GuildId               | Ulong  | The guild id the bot will be running on.                                                                                                      |
+| YeesterId             | Ulong  | This is the ID that MrYeester has, you can set it to 0 if you don't want to have any "Yeester counter" (if set to 0 the command will disable) |
+| Channels.Logs         | Ulong  | This is the logs channel.                                                                                                                     |
+| Channels.Case         | Ulong  | This is the cases channel, can be set to the same as logs and it will send the cases in the logs channel.                                     |
+| Channel.ModMail       | Ulong  | This is where all the ModMails will be received.                                                                                              |
+| Channel.BotCommands   | Ulong  | This channel is where the bot commands go                                                                                                     |
+| Channel.ReactionRoles | Ulong  | This is the ReactionRoles channel where the message and reactions will be created.                                                            |
+| Roles.Mod             | Ulong  | The server moderator role.                                                                                                                    |
 
 
 In the config there is also some level roles, since this is a port from another bot the level roles are well, pre made roles that have to be assigned.
@@ -68,7 +70,9 @@ Your config file should look something like this
   "Channels": {
     "Logs": 0,
     "Case": 0,
-    "ModMail": 0
+    "ModMail": 0,
+    "BotCommands": 0,
+    "ReactionRoles": 0
   },
   "Roles": {
     "Mod": 0

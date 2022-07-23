@@ -30,7 +30,7 @@ public class AboutMe : InteractionModuleBase<SocketInteractionContext>
             .WithUrl($"https://discord.com/users/{user.Id}/")
             .WithThumbnailUrl(user.GetAvatarUrl())
             .WithDescription($"🔹 **Overall info**\n{user.Mention}\n`{user.Id}`")
-            .AddField("🔹 User status", $"**Device:** {(user.ActiveClients.Count == 0? "Unknown" : devices)}\n**Status:** {user.Status}")
+            .AddField("🔹 User status", $"**{(user.ActiveClients.Count > 1 ? "Devices": "Device")}:** {(user.ActiveClients.Count == 0? "Unknown" : devices)}\n**Status:** {user.Status}")
             .AddField("🔹 Account creation date", $"<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:f>\n<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:R>")
             .AddField("🔹 Joined FramePaste", $"<t:{user.JoinedAt!.Value.ToUnixTimeMilliseconds() / 1000}:f>\n<t:{user.JoinedAt.Value.ToUnixTimeMilliseconds() / 1000}:R>")
             .AddField("🔹 Roles", roles)

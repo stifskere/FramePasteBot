@@ -101,6 +101,12 @@ public static class CustomMethods
         if (Math.Min(pos1, pos2) == 0) return Math.Max(pos1, pos2);
         return Math.Min(Math.Min(StringDistance(str1, pos1 - 1, str2, pos2) + 1, StringDistance(str1, pos1, str2, pos2 - 1)) + 1, StringDistance(str1, pos1 - 1, str2, pos2 - 1) + (str1[pos1] == str2[pos2] ? 0 : 1));
     }
+
+    public static LevelHandler LevelHandlerDictGetter(IGuildUser user)
+    {
+        if(!LevelsDictionary.ContainsKey(user.Id)) LevelsDictionary.Add(user.Id, new LevelHandler(user));
+        return LevelsDictionary[user.Id];
+    }
     
     public static async Task<string> GetBannerUrlAsync(this IUser user, int size = 512)
     {

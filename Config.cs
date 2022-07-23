@@ -1,4 +1,5 @@
 using System.Text;
+using Discord.WebSocket;
 using FPB.handlers;
 using Newtonsoft.Json;
 
@@ -23,8 +24,10 @@ public static class Config
         return JsonConvert.DeserializeObject(file.ReadToEnd())!;
     }
 
-    public static readonly DataBaseHandler DataBase = new DataBaseHandler($"./Databases/{LoadConfig().GuildId.ToString()}.db");
+    public static readonly DataBaseHandler DataBase = new($"./Databases/{LoadConfig().GuildId.ToString()}.db");
     public static BanManager? BanHandler;
     public static Dictionary<string, int> CommandUses = new();
     public static ulong UpTime = 0;
+    public static readonly SocketGuild Guild = Client.GetGuild(ulong.Parse(LoadConfig().GuildId.ToString()));
+    public static Dictionary<ulong, LevelHandler> LevelsDictionary = new();
 }
