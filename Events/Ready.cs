@@ -23,7 +23,7 @@ public static class Ready
         #pragma warning disable CS4014
         Task.Run(UpTimeUpdater);
         #pragma warning restore CS4014
-        
+        ReactionRolesCreator.CreateEmbed();
         foreach (RestInviteMetadata invite in await Guild.GetInvitesAsync()) if(!UserJoined.InviteCounts.ContainsKey(invite.Id)) UserJoined.InviteCounts.Add(invite.Id, invite.Uses!.Value);
         await Guild.DownloadUsersAsync();
     }

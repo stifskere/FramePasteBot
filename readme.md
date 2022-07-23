@@ -49,6 +49,26 @@ Values are displayed dynamically typed
 | Channel.ReactionRoles | Ulong  | This is the ReactionRoles channel where the message and reactions will be created.                                                            |
 | Roles.Mod             | Ulong  | The server moderator role.                                                                                                                    |
 
+---
+
+For the reaction roles it is a simple array with objects inside that contain 2 values
+
+| Value       | Type   | Description                                                  |
+|-------------|--------|--------------------------------------------------------------|
+| RoleId      | Ulong  | The role ID used to fetch the role.                          |
+| RoleName    | String | The role name shown in the list selection title              |
+| Description | String | The role description shown in the list selection description |
+
+
+it should look something like this
+
+```json
+{
+  "ReactionRoles": [{"RoleId": 0, "RoleName": "Role name", "Description": "This role notifies for role name"}]
+}
+```
+
+---
 
 In the config there is also some level roles, since this is a port from another bot the level roles are well, pre made roles that have to be assigned.
 
@@ -59,6 +79,8 @@ all the level roles follow this dynamic standard inside Levels object, there is 
 | RoleId   | Ulong | This is the level role id                                                       |
 | Time     | Int   | This is the time in days the user needs to be in the server to reach the role   |
 | Messages | Ulong | This is the number of messages that the user needs to have to level up to there |
+
+---
 
 Your config file should look something like this
 
@@ -77,6 +99,7 @@ Your config file should look something like this
   "Roles": {
     "Mod": 0
   },
+  "ReactionRoles": [{"RoleId": 0, "RoleName": "Role name"}],
   "Levels" : {
     "1":{
       "RoleId": 0,
