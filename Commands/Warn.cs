@@ -13,6 +13,8 @@ public class Warn : InteractionModuleBase<SocketInteractionContext>
         
         DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, RemovalTime, Type, PunishmentTime) VALUES({user.Id}, {Context.User.Id}, '{reason}', 0, 'Warn', {NowTime})");
 
+        await user.SendMessageAsync(text: $"You were warned in {Context.Guild.Name}\n {(reason.Length != 0 ? $"Because of the reason: {reason}" : "With no reason specified, you may ask moderators")}\nIf you don't want any more warns in a future you may read <#858068664283693077> to avoid confusions");
+        
         EmbedBuilder warnEmbed = new EmbedBuilder()
             .WithTitle($"{user.GetTag()} was warned")
             .WithDescription($"\n**With the reason:** `{reason}`\n**Case Id:** `{GetLastCaseId()}`\n**UserID:** `{user.Id}`")

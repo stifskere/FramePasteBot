@@ -11,9 +11,11 @@ public static class MessageDeleted
     {
         _channel = await cachedChannel.GetOrDownloadAsync();
         _message = (IUserMessage) await cachedMessage.GetOrDownloadAsync();
-
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        if (_message != null && (_message.Author.IsBot == false || _message.Content != "")) await LogDeletion();
+        
+        if(_message.Author.IsBot) return;
+        if (!string.IsNullOrEmpty(_message.Content)) await LogDeletion();
+        
+        LevelHandler.CheckLevelAndCountMessage(_message.Author, LevelHandler.Method.Remove);
     }
 
     private static async Task LogDeletion()

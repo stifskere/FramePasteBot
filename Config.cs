@@ -29,5 +29,4 @@ public static class Config
     public static Dictionary<string, int> CommandUses = new();
     public static ulong UpTime = 0;
     public static readonly SocketGuild Guild = Client.GetGuild(ulong.Parse(LoadConfig().GuildId.ToString()));
-    public static Dictionary<ulong, LevelHandler> LevelsDictionary = new();
 }

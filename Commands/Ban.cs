@@ -40,6 +40,7 @@ public class Ban : InteractionModuleBase<SocketInteractionContext>
             }
         }
         
+        await user.SendMessageAsync(text: $"You were banned from {Context.Guild.Name}\n {(reason.Length != 0 ? $"Because of the reason: {reason}" : "With no reason specified")}\nfor {bannedTime}\nYou may contact some moderator to appeal");
         await user.BanAsync(reason: $"Case {GetLastCaseId()} - reason: {reason}, time: {time}");
 
         EmbedBuilder banEmbed = new EmbedBuilder()

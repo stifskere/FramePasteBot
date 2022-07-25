@@ -13,6 +13,7 @@ public class Kick : InteractionModuleBase<SocketInteractionContext>
         
         DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, RemovalTime, Type, PunishmentTime) VALUES({user.Id}, {Context.User.Id}, '{reason}', 0, 'Kick', {NowTime})");
         
+        await user.SendMessageAsync(text: $"You were kicked from {Context.Guild.Name}\n {(reason.Length != 0 ? $"Because of the reason: {reason}" : "With no reason specified")}\nYou can rejoin if you find another invite, read rules to avoid confusion next time.");
         await user.KickAsync(reason: $"Case {GetLastCaseId()} - {reason}");
         
         EmbedBuilder kickEmbed = new EmbedBuilder()

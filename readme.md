@@ -53,18 +53,19 @@ Values are displayed dynamically typed
 
 For the reaction roles it is a simple array with objects inside that contain 2 values
 
-| Value       | Type   | Description                                                  |
-|-------------|--------|--------------------------------------------------------------|
-| RoleId      | Ulong  | The role ID used to fetch the role.                          |
-| RoleName    | String | The role name shown in the list selection title              |
-| Description | String | The role description shown in the list selection description |
+| Value           | Type   | Description                                                  |
+|-----------------|--------|--------------------------------------------------------------|
+| RoleId          | Ulong  | The role ID used to fetch the role.                          |
+| RoleName        | String | The role name shown in the list selection title              |
+| Description     | String | The role description shown in the embed                      |
+| MenuDescription | String | The role description shown in the list selection description |
 
 
 it should look something like this
 
 ```json
 {
-  "ReactionRoles": [{"RoleId": 0, "RoleName": "Role name", "Description": "This role notifies for role name"}]
+  "ReactionRoles": [{"RoleId": 0, "RoleName": "Role name", "Description": "Some nice description", "MenuDescription" : "Some nice description"}]
 }
 ```
 
@@ -99,7 +100,7 @@ Your config file should look something like this
   "Roles": {
     "Mod": 0
   },
-  "ReactionRoles": [{"RoleId": 0, "RoleName": "Role name"}],
+  "ReactionRoles": [{"RoleId": 0, "RoleName": "Role name", "Description": "Some nice description", "MenuDescription" : "Some nice description"}],
   "Levels" : {
     "1":{
       "RoleId": 0,

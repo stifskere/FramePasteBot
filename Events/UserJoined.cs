@@ -22,7 +22,7 @@ public static class UserJoined
             .WithTitle($"Member joined: {user.GetTag()}")
             .WithDescription($"<@{user.Id}>\n`{user.Id}`")
             .AddField("🔹 Account creation date",$"<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:f>\n<t:{user.CreatedAt.ToUnixTimeMilliseconds() / 1000}:R>")
-            .AddField("🔹 **Invite data**", $"**Invite:** `{InviteCodes[user.Id].Code}`\n**Created by:** {InviteCodes[user.Id].Inviter.GetTag()}`")
+            .AddField("🔹 **Invite data**", $"**Invite:** `{InviteCodes[user.Id].Code}`\n**Created by:** `{InviteCodes[user.Id].Inviter.GetTag()}`")
             .WithThumbnailUrl(user.GetDisplayAvatarUrl())
             .WithCurrentTimestamp()
             .WithColor(GetEmbedColor(EmbedColors.EmbedGreenColor));

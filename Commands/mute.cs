@@ -37,6 +37,7 @@ public class Mute : InteractionModuleBase<SocketInteractionContext>
                 return;
         }
 
+        await user.SendMessageAsync(text: $"You got muted in {Context.Guild.Name}\n {(reason.Length != 0 ? $"Because of the reason: {reason}" : "With no reason specified, you may ask moderators")}\nfor {mutedTime}\nIf you don't want any more mutes in a future you may read <#858068664283693077> to avoid confusions");
         await user.SetTimeOutAsync(TimeSpan.FromSeconds(muteTime));
         
         EmbedBuilder muteEmbed = new EmbedBuilder()

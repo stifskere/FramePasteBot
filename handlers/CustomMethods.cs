@@ -6,17 +6,22 @@ namespace FPB.handlers;
 
 public static class CustomMethods
 {
-    public static async Task<dynamic> HttpRequest(string url, Dictionary<string, string>? headers = null, string method = "GET")
+    public enum HttpMethod
+    {
+        Get,
+        Delete
+    }
+    public static async Task<dynamic> HttpRequest(string url, Dictionary<string, string>? headers = null, HttpMethod method = HttpMethod.Get)
     {
         using HttpClient client = new HttpClient();
         if(headers != null) foreach (KeyValuePair<string, string> header in headers) client.DefaultRequestHeaders.Add(header.Key, header.Value);
         dynamic retObj = null!;
         switch (method)
         {
-            case "GET":
+            case HttpMethod.Get:
                 retObj =  JsonConvert.DeserializeObject(await client.GetStringAsync(url))!;
                 break;
-            case "DELETE":
+            case HttpMethod.Delete:
                 try {await client.DeleteAsync(url); retObj = JsonConvert.SerializeObject("{\"status\": \"deleted\"}"); } catch { Console.WriteLine("Error on deleting."); }
                 break;
             default:
@@ -26,20 +31,11 @@ public static class CustomMethods
         return retObj;
     }
 
-    public static IEnumerable<string> SplitChunks(string str, int maxChunkSize) {
-        for (int i = 0; i < str.Length; i += maxChunkSize) yield return str.Substring(i, Math.Min(maxChunkSize, str.Length-i));
-    }
-
-    public static Random Random = new Random();
+    public static readonly Random Random = new();
 
     public static ulong NowTime { get; set; } = (ulong) (DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
 
-    public enum EmbedColors
-    {
-        EmbedGreenColor,
-        EmbedRedColor,
-        EmbedDefaultColor
-    }
+    public enum EmbedColors { EmbedGreenColor, EmbedRedColor, EmbedDefaultColor }
 
     public static uint GetEmbedColor(EmbedColors type = EmbedColors.EmbedDefaultColor)
     {
@@ -102,12 +98,6 @@ public static class CustomMethods
         return Math.Min(Math.Min(StringDistance(str1, pos1 - 1, str2, pos2) + 1, StringDistance(str1, pos1, str2, pos2 - 1)) + 1, StringDistance(str1, pos1 - 1, str2, pos2 - 1) + (str1[pos1] == str2[pos2] ? 0 : 1));
     }
 
-    public static LevelHandler LevelHandlerDictGetter(IGuildUser user)
-    {
-        if(!LevelsDictionary.ContainsKey(user.Id)) LevelsDictionary.Add(user.Id, new LevelHandler(user));
-        return LevelsDictionary[user.Id];
-    }
-    
     public static async Task<string> GetBannerUrlAsync(this IUser user, int size = 512)
     {
         // ReSharper disable once RedundantCast

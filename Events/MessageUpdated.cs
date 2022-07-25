@@ -23,7 +23,7 @@ public static class MessageUpdated
         EmbedBuilder logEditEmbed = new EmbedBuilder()
             .WithTitle("Message Edited!")
             .WithAuthor($"{_newMessage!.Author.GetTag()} - {_newMessage.Author.Id}", iconUrl: _newMessage.Author.GetAvatarUrl())
-            .WithDescription($"<@{_newMessage.Author.Id}> edited a message\nwhich content was:\n```ansi\n\u001b[1;32m{_oldMessage!.Content.Replace("`", "")}```\nand now is:\n```{_newMessage.Content.Replace("`", "")}```\nin channel: {_channel!.GetMention()}")
+            .WithDescription($"<@{_newMessage.Author.Id}> edited a message\nwhich content was:\n```{_oldMessage!.Content.Replace("`", "")}```\nand now is:\n```{_newMessage.Content.Replace("`", "")}```\nin channel: {_channel!.GetMention()}")
             .WithCurrentTimestamp()
             .WithColor(GetEmbedColor(EmbedColors.EmbedRedColor));
 
