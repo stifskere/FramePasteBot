@@ -5,6 +5,8 @@ using ConnectionState = Discord.ConnectionState;
 
 namespace FPB.handlers;
 
+//TODO kinda remake Ban manager
+
 public class BanManager
 {
     //key = userId & content = Time

@@ -34,11 +34,9 @@ public static class MessageReceived
         SQLiteDataReader insultsQuery = DataBase.RunSqliteQueryCommand("SELECT * FROM BannedWords");
         while (insultsQuery.Read())
         {
-            if (message.Content.Contains(insultsQuery.GetString(0)))
-            {
-                await message.DeleteAsync();
-                return;
-            }
+            if (!message.Content.Split(" ").Contains(insultsQuery.GetString(0))) continue;
+            await message.DeleteAsync();
+            return;
         }
 
         LevelHandler.CheckLevelAndCountMessage(message.Author);
