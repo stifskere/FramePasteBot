@@ -1,75 +1,56 @@
 ﻿using System.Data.SQLite;
 using Discord;
-using Discord.WebSocket;
+using Discord.Rest;
 using ConnectionState = Discord.ConnectionState;
 
 namespace FPB.handlers;
 
-//TODO kinda remake Ban manager
-
 public class BanManager
 {
-    //key = userId & content = Time
-    private static Dictionary<ulong, long> TimerDict = new();
+    //key = caseId, value = CaseInfo struct
+    private static Dictionary<int, CaseInfo> TimerDict = new();
     public BanManager()
     {
         SQLiteDataReader bans = DataBase.RunSqliteQueryCommand("SELECT * FROM Cases WHERE Type = 'Ban' AND RemovalTime != 0");
         while (bans.Read())
         {
-            if(TimerDict.ContainsKey((ulong)bans.GetInt64(1))) continue;
-            TimerDict.Add((ulong)bans.GetInt64(1), bans.GetInt64(4));
+            if(NowTime > (ulong)bans.GetInt64(4)) continue;
+            TimerDict.Add(bans.GetInt32(0), new CaseInfo {User = Guild.Users.First(u => u.Id == (ulong)bans.GetInt64(1)), UnbanTime = (ulong)bans.GetInt64(4)});
         }
-
         Task.Run(BanCounter);
     }
 
-    public void NewBanCounter(IGuildUser user, long time)
+    public void NewBanCounter(IGuildUser user, ulong time, int caseNum)
     {
-        if (!TimerDict.ContainsKey(user.Id))
-        {
-            TimerDict.Add(user.Id, time);
-        }
+       TimerDict.Add(caseNum, new CaseInfo {User = user, UnbanTime = time});
     }
 
     private static async void BanCounter()
     {
         while (Client.ConnectionState == ConnectionState.Connected)
         {
-            ulong actualTime = NowTime;
-
-            foreach (KeyValuePair<ulong, long> entry in TimerDict)
+            foreach (var ban in TimerDict.Where(ban => ban.Value.UnbanTime < NowTime))
             {
-                if ((ulong)entry.Value <= actualTime)
-                {
-                    ulong userId = ulong.Parse(entry.Key.ToString());
-                    SocketGuild guild = Client.Guilds.First(g => g.Id == (ulong)LoadConfig().GuildId);
-                    await guild.DownloadUsersAsync();
-                    if (await guild.GetBansAsync().AnyAsync(bans => bans.All(f => f.User.Id != userId)))
-                    {
-                        DataBase.RunSqliteNonQueryCommand($"DELETE FROM Cases WHERE UserId = {userId}");
-                        TimerDict.Remove(userId);
-                        return;
-                    }
-                    await guild.RemoveBanAsync(userId);
-                   SQLiteDataReader banData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE UserId = {userId}");
-                   EmbedBuilder unBanEmbed = new EmbedBuilder();
-
-                   while (banData.Read())
-                   {
-                       unBanEmbed = unBanEmbed
-                           .WithTitle($"{userId} was unbanned")
-                           .WithTitle($"**Reason:** Time expired\n**Ban reason:** {banData.GetString(3)}\n**Case ID:** {banData.GetInt32(0)}")
-                           .WithColor(GetEmbedColor(EmbedColors.EmbedGreenColor));
-                   }
-                   
-                   DataBase.RunSqliteNonQueryCommand($"DELETE FROM Cases WHERE UserId = {userId}");
-                   TimerDict.Remove(userId);
-                   
-                   await SendLog(embed: unBanEmbed.Build());
-                }
+                IEnumerable<RestBan> bans = await Guild.GetBansAsync().FlattenAsync();
+                RestBan? selectBan = bans.FirstOrDefault(b => b.User.Id == ban.Value.User.Id);
+                if (selectBan != null) await Guild.RemoveBanAsync(ban.Value.User.Id);
             }
-
-            await Task.Delay(1000);
+            await Task.Delay(1);
         }
+    }
+
+    public async void RemoveBanFromDataBase(int caseNum, IGuildUser author)
+    {
+        string reason = "";
+        SQLiteDataReader banData = DataBase.RunSqliteQueryCommand($"SELECT * FROM Cases WHERE Id == {caseNum}");
+        while (banData.Read()) reason = banData.GetString(3);
+        DataBase.RunSqliteNonQueryCommand($"UPDATE Cases SET RemovalTime = 0, Reason = '{reason}(unbanned - case dismissed)' WHERE Id = {caseNum}");
+        DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, RemovalTime, Type, PunishmentTime) VALUES({author.Id}, {Client.CurrentUser.Id}, '')");
+    }
+
+    private struct CaseInfo
+    {
+        public IGuildUser User { get; init; }
+        public ulong UnbanTime { get; init; }
     }
 }

@@ -15,12 +15,12 @@ there are some packages used in this bot, some of them are private but you can f
 
 the following packages are needed to edit the bot:
 
-| Package name       | Description                                                          |
-|--------------------|----------------------------------------------------------------------|
-| Discord.net        | The discord api wrapper used for the bot.                            |
-| ColorCat (private) | A color converting class library made by my friend SenyorGato#7759   |
-| System.Data.Sqlite | The database utility package used to write / read databases.         |
-| Z.Expressions.Eval | Some eval utility, there is no much use for it so it may be removed. |
+| Package name                            | Description                                                        |
+|-----------------------------------------|--------------------------------------------------------------------|
+| Discord.net                             | The discord api wrapper used for the bot.                          |
+| ColorCat (private)                      | A color converting class library made by my friend SenyorGato#7759 |
+| System.Data.Sqlite                      | The database utility package used to write / read databases.       |
+| Microsoft.CodeAnalysis.Csharp.Scripting | The base microsoft eval utility, used for eval command.            |
 
 ### Usage
 

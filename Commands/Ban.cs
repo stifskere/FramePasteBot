@@ -52,9 +52,9 @@ public class Ban : InteractionModuleBase<SocketInteractionContext>
         
         ulong banTimeStamp = NowTime + (ulong)banTime;
 
-        DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, RemovalTime, Type, PunishmentTime) VALUES({user.Id}, {Context.User.Id}, '{reason}', {(banTime == 0 ? 0 : banTimeStamp)}, 'Ban', {NowTime})");
+        await Task.Run(() => DataBase.RunSqliteNonQueryCommand($"INSERT INTO Cases(UserId, ModeratorId, Reason, RemovalTime, Type, PunishmentTime) VALUES({user.Id}, {Context.User.Id}, '{reason}', {(banTime == 0 ? 0 : banTimeStamp)}, 'Ban', {NowTime})"));
         await SendLog(embed: banEmbed.Build(), caseLog: true);
-        BanHandler!.NewBanCounter(user, (long)banTimeStamp);
+        BanHandler!.NewBanCounter(user, banTimeStamp, GetLastCaseId());
 
         banEmbed = banEmbed.WithThumbnailUrl("https://c.tenor.com/tkJk3Ui_OBIAAAAC/ban-hammer.gif");
         

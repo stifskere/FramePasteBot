@@ -27,6 +27,7 @@ public class DataBaseHandler : IDisposable
         _cmd = new SQLiteCommand(command, _con);
         return _cmd.ExecuteReader();
     }
+    
 
     public void Dispose()
     {
